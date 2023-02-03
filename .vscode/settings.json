@@ -32,5 +32,10 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "files.associations": {
+    "TST_RAST.C": "cpp",
+    "RASTER.C": "cpp",
+    "TUT4.C": "cpp"
+  }
 }
