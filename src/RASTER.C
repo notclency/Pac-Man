@@ -109,3 +109,13 @@ void plot_bitmap_32(UINT32 *base, int x, int y, const UINT32 *bitmap, unsigned i
 		}
 	}
 }
+
+void clear_screen(char *base)
+{
+	int i;
+
+	for (i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
+	{
+		*(base + i) = 0x00;
+	}
+}
