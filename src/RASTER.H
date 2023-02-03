@@ -20,4 +20,6 @@ void plot_bitmap_32(UINT32 *base,int x, int y, const UINT32 *bitmap, unsigned in
 
 void clear_screen(char *base);
 
+void clear_region(char *base, int x1, int y1, int x2, int y2);
+
 #endif

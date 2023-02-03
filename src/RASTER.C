@@ -112,10 +112,26 @@ void plot_bitmap_32(UINT32 *base, int x, int y, const UINT32 *bitmap, unsigned i
 
 void clear_screen(char *base)
 {
-	int i;
+	int x;
 
-	for (i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
+	for (x = 0; x < SCREEN_WIDTH * SCREEN_HEIGHT; x++)
 	{
-		*(base + i) = 0x00;
+		*(base + x) = 0x00;
+	}
+}
+
+void clear_region(char *base, int x1, int y1, int x2, int y2)
+{
+	int x, y;
+
+	if (x1 >= 0 && x1 < SCREEN_WIDTH && x2 >= 0 && x2 < SCREEN_WIDTH && y1 >= 0 && y1 < SCREEN_HEIGHT && y2 >= 0 && y2 < SCREEN_HEIGHT)
+	{
+		for (y = y1; y < y2; y++)
+		{
+			for (x = x1; x < x2; x++)
+			{
+				*(base + x) = 0x00;
+			}
+		}
 	}
 }
