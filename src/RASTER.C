@@ -110,6 +110,17 @@ void plot_bitmap_32(UINT32 *base, int x, int y, const UINT32 *bitmap, unsigned i
 	}
 }
 
+
+void plot_rectangle(char *base, int x1, int y1, int x2, int y2)
+{
+	/* Do something */
+}
+
+void plot_square(char *base, int x, int y, int size)
+{
+	/* Do something */
+}
+
 void clear_screen(char *base)
 {
 	int x;
