@@ -1,6 +1,28 @@
 #include <osbind.h>
 #include <stdio.h>
 #include "RASTER.H"
+#include "font.h"
+
+UINT16 paul16[16] = {
+	0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
+	0xC003, 0xC003, 0xF801, 0xFC01, 
+	0xFE01, 0xFC01, 0xF803, 0xC003, 
+	0xE007, 0xF00F, 0xFC3F, 0xFFFF
+ 
+};
+
+UINT32 paul32[32] = {
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFF007FF, 
+	0xFFC7F1FF, 0xFF9FFCFF, 0xFF3FFE7F, 0xFE7FFF7F, 
+	0xFCFFFF3F, 0xFDFFFFBF, 0xF81C0F9F, 0xF3E9F7DF, 
+	0xEFEBF00F, 0xEFE3F66F, 0xEFEBF5EF, 0xEFEBE5AF, 
+	0xF71C0F4F, 0xF07FFFDF, 0xFB7EFE1F, 0xFB60FEFF, 
+	0xF70FFEFF, 0xF7FFFEFF, 0xF7FEFCFF, 0xF6FDF9FF, 
+	0xFB03FBFF, 0xFBFFF3FF, 0xF8FFE7FF, 0xFE1FCFFF, 
+	0xFFC01FFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF 
+
+ 
+};
 
 UINT16 pacman[16] = {
 		0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
@@ -32,38 +54,14 @@ UINT16 invader_bitmap[16] =
 
 int main()
 {
-	/*int i;
-	/*int j;
-
-	/*void *base = Physbase();
-
-	/*clear_screen(base);
-
-	/*plot_pixel(base, 79, 79);
-	/*plot_pixel(base, 79, 330);
-
-	/*plot_vertical_line(base, 75, 330, 79); /* x1,y2 < y1 */
-	/*plot_vertical_line(base, 77, 79, 330); /* x1,y1 < y2 */
-
-	/*plot_horizontal_line(base, 30, 79, 60); /* x2 > x1 */
-	/*plot_horizontal_line(base, 60, 85, 30); /* x2 < x1 */
-
-	/*clear_region(base, 30, 79, 60, 79);	 /* clear top line */
-	/*clear_region(base, 77, 79, 77, 330); /* clear right line */
-
-	/*plot_square(base, 1, 1, 50);
-	/*plot_rectangle(base, 1, 100, 51, 200);*/
+	int i;
+	int j;
 
 	void *base = Physbase();
 	UINT32 *base32 = (UINT32 *)Physbase();
 	UINT16 *base16 = (UINT16 *)Physbase();
-
-	black_screen(base);
-
-	plot_bitmap_16(base16, 20, 10, pacman, 16);
-	plot_bitmap_16(base16, 10, 10, invader_bitmap, 16);
-	plot_bitmap_16(base16, 11, 10, invader_bitmap, 16);
-
+	
+	clear_screen(base);
 
 	return 0;
 }

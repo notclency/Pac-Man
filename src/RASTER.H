@@ -31,4 +31,6 @@ void clear_region(char *base, int x1, int y1, int x2, int y2);
 
 void black_screen(char *base);
 
+void black_region(char *base, int x1, int y1, int x2, int y2);
+
 #endif

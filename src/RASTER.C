@@ -1,7 +1,25 @@
 #include "RASTER.H"
+#include "font.h"
 
 #define SCREEN_WIDTH 640 /* 80 working in bytes */
 #define SCREEN_HEIGHT 400
+
+/*
+plot_pixel
+plot_vertical_line
+plot_horizontal_line
+plot_bitmap_8
+plot_bitmap_16
+plot_bitmap_32
+plot_rectangle
+plot_square
+clear_pixel
+clear_screen
+clear_region
+black_screen
+black_region
+shift_bitmap16
+*/
 
 /*
 	parameters:
@@ -17,14 +35,7 @@
 */
 void plot_pixel(char *base, int x, int y)
 {
-	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
-	{
-		*(base + y * 80 + x) = 0xff;
-	}
-	else
-	{
-		return;
-	}
+	*(base + y * 80 + (x >> 3)) |= 1 << 7 - (x & 7);
 }
 
 /*
@@ -46,27 +57,13 @@ void plot_vertical_line(char *base, int x1, int y1, int y2)
 
 	if (x1 >= 0 && x1 < SCREEN_WIDTH && y1 >= 0 && y1 < SCREEN_HEIGHT && y2 >= 0 && y2 < SCREEN_HEIGHT)
 	{
-		if (y2 <= y1)
+		for (i = y1; i <= y2; i++)
 		{
-			while (y2 <= y1)
-			{
-				*(base + y2 * 80 + x1) = 0xff;
-				y2++;
-			}
-		}
-		else
-		{
-			while (y1 <= y2)
-			{
-				*(base + y1 * 80 + x1) = 0xff;
-				y1++;
-			}
+			plot_pixel(base, x1, i);
 		}
 	}
-	else
-	{
-		return;
-	}
+
+	return;
 }
 
 /*
@@ -84,31 +81,30 @@ void plot_vertical_line(char *base, int x1, int y1, int y2)
 */
 void plot_horizontal_line(char *base, int x1, int y1, int x2)
 {
-	int i;
+	int i = (x2 - x1) / 8;
 
 	if (x1 >= 0 && x1 < SCREEN_WIDTH && x2 >= 0 && x2 < SCREEN_WIDTH && y1 >= 0 && y1 < SCREEN_HEIGHT)
 	{
-		if (x2 <= x1)
+		while (x1 % 8 != 0 && x1 <= x2)
 		{
-			while (x2 <= x1)
-			{
-				*(base + y1 * 80 + x2) = 0xff;
-				x2++;
-			}
+			plot_pixel(base, x1, y1);
+			x1++;
 		}
-		else
+		while (i > 0)
 		{
-			while (x1 <= x2)
-			{
-				*(base + y1 * 80 + x1) = 0xff;
-				x1++;
-			}
+			*(base + y1 * 80 + (x1 >> 3)) = 0xff;
+			x1 += 8;
+			i--;
 		}
+		while (x1 <= x2)
+		{
+			plot_pixel(base, x1, y1);
+			x1++;
+		}
+		
 	}
-	else
-	{
-		return;
-	}
+
+	return;
 }
 
 void plot_bitmap_8(UINT8 *base, int x, int y, const UINT8 *bitmap, unsigned int height)
@@ -133,7 +129,7 @@ void plot_bitmap_16(UINT16 *base, int x, int y, const UINT16 *bitmap, unsigned i
 	{
 		for (i = 0; i < height; i++)
 		{
-			*(base + y * 80 + x) = bitmap[i];
+			*(base + y * 40 + x) = bitmap[i];
 			y++;
 		}
 	}
@@ -147,7 +143,7 @@ void plot_bitmap_32(UINT32 *base, int x, int y, const UINT32 *bitmap, unsigned i
 	{
 		for (i = 0; i < height; i++)
 		{
-			*(base + y * 80 + x) = bitmap[i];
+			*(base + y * 20 + x) = bitmap[i];
 			y++;
 		}
 	}
@@ -197,15 +193,12 @@ void plot_rectangle(char *base, int x1, int y1, int x2, int y2)
 */
 void plot_square(char *base, int x, int y, int size)
 {
-	int i;
-	int j;
-
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
 	{
-		plot_horizontal_line(base, x, y, x + size);
-		plot_vertical_line(base, x, y, y + size);
-		plot_vertical_line(base, x + size, y, y + size);
-		plot_horizontal_line(base, x, y + size, x + size);
+		plot_horizontal_line(base, x, y, x + size - 1);
+		plot_vertical_line(base, x, y, y + size - 1);
+		plot_vertical_line(base, x + size - 1, y, y + size - 1);
+		plot_horizontal_line(base, x, y + size - 1, x + size - 1);
 	}
 	else
 	{
@@ -298,6 +291,23 @@ void black_screen(char *base)
 		for (j = 0; j < 400; j++)
 		{
 			plot_pixel(base, i, j);
+		}
+	}
+}
+
+void black_region(char *base, int x1, int y1, int x2, int y2)
+{
+	int i;
+	int j;
+
+	if (x1 >= 0 && x1 < SCREEN_WIDTH && x2 >= 0 && x2 < SCREEN_WIDTH && y1 >= 0 && y1 < SCREEN_HEIGHT && y2 >= 0 && y2 < SCREEN_HEIGHT)
+	{
+		for (i = x1; i <= x2; i++)
+		{
+			for (j = y1; j <= y2; j++)
+			{
+				plot_pixel(base, i, j);
+			}
 		}
 	}
 }
