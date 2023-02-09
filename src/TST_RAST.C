@@ -58,10 +58,18 @@ int main()
 	int j;
 
 	void *base = Physbase();
+
+	UINT8 *base8 = (UINT8 *)Physbase();
 	UINT32 *base32 = (UINT32 *)Physbase();
 	UINT16 *base16 = (UINT16 *)Physbase();
 	
 	clear_screen(base);
 
+	plot_bitmap_16(base16, 2, 100, pacman, 16);
+
+	print_string(base, 100, 200, "GLENN IS GAY");
+
+	plot_pixel(base, 10, 12);
+	
 	return 0;
 }

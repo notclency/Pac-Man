@@ -101,7 +101,6 @@ void plot_horizontal_line(char *base, int x1, int y1, int x2)
 			plot_pixel(base, x1, y1);
 			x1++;
 		}
-		
 	}
 
 	return;
@@ -309,5 +308,33 @@ void black_region(char *base, int x1, int y1, int x2, int y2)
 				plot_pixel(base, i, j);
 			}
 		}
+	}
+}
+
+void print_char(char *base, int x, int y, char ch)
+{
+	int i = 0;
+	/*
+	 * start font from given char
+	 */
+	if (IS_PRINTABLE(ch))
+	{
+		UINT8 *char_hex = (UINT8 *) GLYPH_START(ch);
+		for (i = 0; i < 8; i++, char_hex++)
+		{
+			*(base + (y + i) * 80 + (x >> 3)) = *char_hex;
+		}
+	}
+
+}
+
+void print_string(char *base, int x, int y, char *str)
+{
+	int i = 0;
+	while (str[i] != '\0')
+	{
+		print_char(base, x, y, str[i]);
+		x += 8;
+		i++;
 	}
 }

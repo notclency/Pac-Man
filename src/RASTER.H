@@ -33,4 +33,8 @@ void black_screen(char *base);
 
 void black_region(char *base, int x1, int y1, int x2, int y2);
 
+void print_char(char *base, int x, int y, char c);
+
+void print_string(char *base, int x, int y, char *s);
+
 #endif
