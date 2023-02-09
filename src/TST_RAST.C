@@ -67,7 +67,17 @@ int main()
 
 	plot_bitmap_16(base16, 2, 100, pacman, 16);
 
-	print_string(base, 100, 200, "GLENN IS GAY");
+	print_string(base, 100, 200, "Clency");
+
+	print_char(base,100,250,'P');
+	print_char(base,108,250,'A');
+	print_char(base,116,250,'C');
+	print_char(base,124,250,'-');
+	print_char(base,132,250,'M');
+	print_char(base,140,250,'A');
+	print_char(base,148,250,'N');
+	
+	print_string(base, 100, 300, "GLENN");
 
 	plot_pixel(base, 10, 12);
 	
