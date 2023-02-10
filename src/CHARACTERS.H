@@ -19,16 +19,25 @@ struct ghost {
     int state;
 };
 
-struct snackPallete {
+struct snack_Pallete {
     int x;
     int y;
     int state;
+    int speed;
 };
 
-struct fruit {
+struct glowing_ball{ 
     int x;
     int y;
     int state;
+    int speed;
+};
+
+struct cherry {
+    int x;
+    int y;
+    int state;
+    int speed;
 };
 
 #endif

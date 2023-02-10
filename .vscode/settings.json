@@ -38,6 +38,7 @@
     "RASTER.C": "cpp",
     "TUT4.C": "cpp",
     "TYPES.H": "cpp",
-    "array": "cpp"
+    "array": "cpp",
+    "CHARACTERS.C": "cpp"
   }
 }

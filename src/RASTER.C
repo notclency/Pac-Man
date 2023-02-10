@@ -1,3 +1,14 @@
+/*
+	File Name: RASTER.C
+
+	Purpose: The purpose of this file is a library design of a 
+	pac-man game which develops low-level routines and other 
+	designs or drawings. We have created many plot functions 
+	that can plot bitmaps,pixel,shapes,clear/black screen. 
+
+	Authors: Glenn and Clency
+
+*/
 #include "RASTER.H"
 #include "font.h"
 
