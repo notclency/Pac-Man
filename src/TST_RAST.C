@@ -1,3 +1,14 @@
+/*
+	File Name: TST_RAST.C
+
+	Purpose: This file is used to build the bitmaps pixels, and calls 
+	the functions that will display them on the screen.
+
+	Authors: Glenn and Clency
+
+*/
+
+
 #include <osbind.h>
 #include <stdio.h>
 #include "RASTER.H"
