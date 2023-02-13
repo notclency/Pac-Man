@@ -24,6 +24,13 @@ UINT32 paul32[32] = {
  
 };
 
+UINT32 P [32] = {
+	0xFFFFFFFF, 0xD9FC007F, 0xCAFDFF7F, 0xD37D003F, 0xD5BD7FDF, 0xD6DD7FEF, 0xD75D7FE7, 0xD76D7FEB, 
+	0xD7B57FEB, 0xD7D97FEB, 0xD7ED7FEB, 0xD7F77FEB, 0xD7FB7FEB, 0xD7FB7FEB, 0xD7FD7FEB, 0xD7FE7FEB, 
+	0xD7FF7FEB, 0xD7FFFFEB, 0xD7FFFFEB, 0xD7FFFFEB, 0xD7FFFFEB, 0xD7FFFFAB, 0xD7FFFFAB, 0xD7FFFFAB, 
+	0xD7FFFFAB, 0xD7FFFFAB, 0xC7FFF02B, 0xF7FFFFEB, 0xF000000B, 0xFDFFFFFB, 0xFC000003, 0xFFFFFFFF
+};
+
 UINT16 pacman[16] = {
 		0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
 		0xC003, 0xC003, 0xF801, 0xFC01, 
@@ -52,24 +59,26 @@ UINT16 invader_bitmap[16] =
     0x0000
 };
 
+void display_splash_screen(char *base);
+
 int main()
 {
-	int i;
-	int j;
-
-	void *base = Physbase();
-
+	char *base = Physbase();
 	UINT8 *base8 = (UINT8 *)Physbase();
 	UINT32 *base32 = (UINT32 *)Physbase();
 	UINT16 *base16 = (UINT16 *)Physbase();
 	
-	clear_screen(base);
-
-	plot_bitmap_16(base16, 2, 100, pacman, 16);
-
-	print_string(base, 100, 200, "GLENN IS GAY");
-
-	plot_pixel(base, 10, 12);
+	display_splash_screen(base);
 	
 	return 0;
+}
+
+void display_splash_screen(char *base)
+{
+	clear_screen(base);
+	plot_screen((UINT32 *)base, (UINT32 *)splash_screen);
+
+	print_string_8(base, 288, 220, "1 PLAYER");
+	print_string_8(base, 288, 250, "2 PLAYERS");
+	print_string_8(base, 212, 300, "MADE BY CLENCY & GLENN - 2023");
 }
