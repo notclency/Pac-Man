@@ -8,11 +8,11 @@
 
 */
 
-
 #include <osbind.h>
 #include <stdio.h>
 #include "RASTER.H"
 #include "font.h"
+#include "splash.h"
 
 UINT16 paul16[16] = {
 	0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
@@ -22,52 +22,11 @@ UINT16 paul16[16] = {
  
 };
 
-UINT32 paul32[32] = {
-	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFF007FF, 
-	0xFFC7F1FF, 0xFF9FFCFF, 0xFF3FFE7F, 0xFE7FFF7F, 
-	0xFCFFFF3F, 0xFDFFFFBF, 0xF81C0F9F, 0xF3E9F7DF, 
-	0xEFEBF00F, 0xEFE3F66F, 0xEFEBF5EF, 0xEFEBE5AF, 
-	0xF71C0F4F, 0xF07FFFDF, 0xFB7EFE1F, 0xFB60FEFF, 
-	0xF70FFEFF, 0xF7FFFEFF, 0xF7FEFCFF, 0xF6FDF9FF, 
-	0xFB03FBFF, 0xFBFFF3FF, 0xF8FFE7FF, 0xFE1FCFFF, 
-	0xFFC01FFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF 
-
- 
-};
-
-UINT32 P [32] = {
-	0xFFFFFFFF, 0xD9FC007F, 0xCAFDFF7F, 0xD37D003F, 0xD5BD7FDF, 0xD6DD7FEF, 0xD75D7FE7, 0xD76D7FEB, 
-	0xD7B57FEB, 0xD7D97FEB, 0xD7ED7FEB, 0xD7F77FEB, 0xD7FB7FEB, 0xD7FB7FEB, 0xD7FD7FEB, 0xD7FE7FEB, 
-	0xD7FF7FEB, 0xD7FFFFEB, 0xD7FFFFEB, 0xD7FFFFEB, 0xD7FFFFEB, 0xD7FFFFAB, 0xD7FFFFAB, 0xD7FFFFAB, 
-	0xD7FFFFAB, 0xD7FFFFAB, 0xC7FFF02B, 0xF7FFFFEB, 0xF000000B, 0xFDFFFFFB, 0xFC000003, 0xFFFFFFFF
-};
-
 UINT16 pacman[16] = {
 		0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
 		0xC003, 0xC003, 0xF801, 0xFC01, 
 		0xFE01, 0xFC01, 0xF803, 0xC003, 
 		0xE007, 0xF00F, 0xFC3F, 0xFFFF 
-};
-
-UINT16 invader_bitmap[16] = 
-{
-    0x0000,
-    0x0810,
-    0x0810,
-    0x0420,
-    0x0240,
-    0x1FF8,
-    0x2004,
-    0x4662,
-    0x4002,
-    0x43C2,
-    0x2424,
-    0x1008,
-    0x0FF0,
-    /*last 3 elements*/
-    0x0240,
-    0x0E70,
-    0x0000
 };
 
 void display_splash_screen(char *base);
@@ -86,10 +45,12 @@ int main()
 
 void display_splash_screen(char *base)
 {
-	clear_screen(base);
+	/*clear_screen(base);*/
 	plot_screen((UINT32 *)base, (UINT32 *)splash_screen);
+
+	plot_pixel(base, 0, 0, black);
 
 	print_string_8(base, 288, 220, "1 PLAYER");
 	print_string_8(base, 288, 250, "2 PLAYERS");
-	print_string_8(base, 212, 300, "MADE BY CLENCY & GLENN - 2023");
+	print_string_8(base, 212, 325, "MADE BY CLENCY & GLENN - 2023");
 }

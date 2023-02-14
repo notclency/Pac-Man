@@ -40,7 +40,8 @@
     "TYPES.H": "cpp",
     "array": "cpp",
     "CHARACTERS.C": "cpp",
-    "MODEL.C": "cpp"
+    "MODEL.C": "cpp",
+    "SPLASH.C": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }
