@@ -3,6 +3,9 @@
 
 #include "TYPES.H"
 
+/* check if plot is in bounds */
+int in_bounds(int x, int y);
+
 
 /* plot line methods */
 void plot_pixel(char *base, int x, int y, int color);
@@ -21,11 +24,15 @@ void clear_pixel(char *base, int x, int y);
 
 /* clear screen region / plots */
 void clear_screen(char *base);
+void clear_region_16(UINT16 *base, int x, int y);
 
 /* print methods */
-void print_char_8(char *base, int x, int y, char c);
-void print_string_8(char *base, int x, int y, char *s);
+void print_char_8(UINT8 *base, int x, int y, char c);
+void print_string_8(UINT8 *base, int x, int y, char *s);
+
+void print_num(UINT8 *base, int x, int y, UINT16 num);
 
 void plot_screen(UINT32 *base, UINT32 *bitmap);
+void plot_map(UINT32 *base, UINT32 *map);
 
 #endif

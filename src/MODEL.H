@@ -2,64 +2,95 @@
 #define MODEL_H
 
 #include "TYPES.H"
+#include "SPRITES.H"
+/* #include "MAZE_ARRAY.H" */
+#include "RASTER.H"
 
 typedef struct {
     unsigned int x, y;
     int delta_x, delta_y;   /* displcement per clock tick / speed */
+    direction direction;
     int lives;
     int score;
-    state state;
+    int is_dead;
+    int snacks_eaten;
     mode mode;
 } pacman;
 
 typedef struct {
     unsigned int x, y;
     int delta_x, delta_y;   /* displcement per clock tick / speed */
-    state state;
+    direction direction;
+    int in_ghost_house;
+    int is_dead;
     mode mode;
 } ghost;
+
+typedef struct 
+{
+    int map_start_x;
+    int map_start_y;
+
+    int ghost_house[25][11]; /* reference to screen not map */
+    int pacman_spwan[21][18]; /* reference to screen not map */
+
+    int snacks;
+    int cherries;
+    int glow_balls;
+    
+    int pacman_location[21][18]; /* reference to screen not map */
+
+    int cherry_spwan[4][2]; /* dont know the position of the cherry spwan yet */
+    int glowing_ball_spwan[4][2]; /* dont know the position of the glowing ball spwan yet */
+    int snack_spwan[280][2]; /* dont know the position of the snack spwan yet */
+} map;
+
 
 typedef struct {
     unsigned int x;
     unsigned int y;
-    int state;
+    int eaten;
 } snack;
 
 typedef struct {
     unsigned int x;
     unsigned int y;
-    int state;
+    int eaten;
 } cherry;
 
 typedef struct {
     unsigned int x;
     unsigned int y;
-    int state;
-} glowing_ball;
+    int eaten;
+} glow_ball;
 
 typedef struct {
     unsigned int x;
     unsigned int y;
+    char player_name[5];    /* 4 characters + null terminator */
+
+    unsigned int x_score;
+    unsigned int y_score;
     int score;
 } scorebox;
 
 typedef struct {
     unsigned int x;
-    unsigned int y;  
-    char player_name[5];    /* 4 characters + null terminator */  
+    unsigned int y;
     int lives;
 } livebox;
 
-typedef struct Model {
-    pacman pacman;
-    ghost ghosts[4];
-    snack snacks[280];
+typedef struct {
+    map map;
+    pacman pacman[2];
+    int game_over;
+    int game_won;
+    ghost ghosts[3];
+    snack snacks[196];
     cherry cherries[4];
-    glowing_ball glowing_balls[4];
-    scorebox scorebox_1;
-    scorebox scorebox_2;
-    livebox livebox_1;
-    livebox livebox_2;
+    glow_ball glow_balls[4];
+    scorebox scorebox[2];
+    livebox livebox[2];
 } Model;
 
 /* move and initialize objects on screen */
@@ -75,51 +106,22 @@ typedef struct Model {
     return:
         void
 */
-void move_pacman(pacman *pacman, direction direction);
+void move_pacman(pacman pacman[], direction direction, int player);
+
+/* Initialize objects on screen */
 
 /*
     paramters:
         ghost: pointer to ghost struct
-        direction: direction to move ghost
+        pacman: pointer to pacman struct
 
     description:
-        moves ghost in the specified direction
+        moves ghost depending on its mode
 
     return:
         void
 */
-void move_ghost(ghost *ghost, direction direction);
-
-
-/*
-    paramters:
-        scorebox: pointer to scorebox struct
-        score: score to update scorebox with
-
-    description:
-        updates scorebox with the specified score
-
-    return:
-        void
-*/
-void update_scorebox(scorebox *scorebox, int score);
-
-
-/*
-    paramters:
-        livebox: pointer to livebox struct
-        lives: lives to update livebox with
-
-    description:
-        updates livebox with the specified lives
-
-    return:
-        void
-*/
-void update_livebox(livebox *livebox, int lives);
-
-
-/* Initialize objects on screen */
+void move_ghost(ghost *ghost, pacman pacman[], int player);
 
 /*
     paramters:
@@ -131,7 +133,7 @@ void update_livebox(livebox *livebox, int lives);
     return:
         void
 */
-void ini_snacks(snack *snacks);
+void ini_snacks(Model *model);
 
 /*
     paramters:
@@ -143,7 +145,7 @@ void ini_snacks(snack *snacks);
     return:
         void
 */
-void ini_cherries(cherry *cherries);
+void ini_cherries(cherry cherries[]);
 
 /*
     paramters:
@@ -155,7 +157,7 @@ void ini_cherries(cherry *cherries);
     return:
         void
 */
-void ini_glowing_balls(glowing_ball *glowing_balls);
+void ini_glow_balls(Model *model);
 
 /*
     paramters:
@@ -170,7 +172,20 @@ void ini_glowing_balls(glowing_ball *glowing_balls);
     return:
         void
 */
-void ini_scorebox(scorebox *scorebox, int x, int y, int score);
+void ini_scorebox(Model *model, int player_count);
+
+/*
+    paramters:
+        scorebox: pointer to scorebox struct
+        score: score to update scorebox with
+
+    description:
+        updates scorebox with the specified score
+
+    return:
+        void
+*/
+void update_scorebox(Model *model, int player);
 
 /*
     paramters:
@@ -185,7 +200,9 @@ void ini_scorebox(scorebox *scorebox, int x, int y, int score);
     return:
         void
 */
-void ini_livebox(livebox *livebox, int x, int y, int lives);
+void ini_livebox(Model *model, int player_count);
+
+void update_livebox(Model *model, int player);
 
 /*
     paramters:
@@ -200,7 +217,7 @@ void ini_livebox(livebox *livebox, int x, int y, int lives);
     return:
         void
 */
-void ini_pacman(pacman *pacman);
+void ini_pacman(Model *model, int player_count, int player);
 
 /*
     paramters:
@@ -212,39 +229,42 @@ void ini_pacman(pacman *pacman);
     return:
         void
 */
-void ini_ghosts(ghost *ghosts);
+void ini_ghosts(Model *model);
 
+void reset_pacman_mode(pacman pacman[], int player);
+void reset_ghost_mode(ghost *ghost);
 
 /* pacman collisions */
-void pacman_collides_with_snack(pacman *pacman, snack *snacks);
-void pacman_collides_with_cherry(pacman *pacman, cherry *cherries);
-void pacman_collides_with_glowing_ball(pacman *pacman, glowing_ball *glowing_balls);
-void pacman_collides_with_ghost(pacman *pacman, ghost *ghosts);
-void pacman_collides_with_wall(pacman *pacman);     /* wall object or background? */
-
+int pacman_collides_with_snack(Model *model, int player);
+int pacman_collides_with_cherry(Model *model, int player);
+int pacman_collides_with_glow_ball(Model *model, int player);
+int pacman_collides_with_ghost(Model *model, int player);
+int pacman_collides_with_ghost_house(pacman pacman[], direction direction, int player);
+int pacman_collides_with_wall(pacman pacman[], direction direction, int player);     /* wall object or background? */
 
 /* ghost collisions */
-void ghost_collides_with_snack(ghost *ghost, snack *snacks);
-void ghost_collides_with_cherry(ghost *ghost, cherry *cherries);
-void ghost_collides_with_glowing_ball(ghost *ghost, glowing_ball *glowing_balls);
-void ghost_collides_with_ghost(ghost *ghost);
-void ghost_collides_with_wall(ghost *ghost);     /* wall object or background? */
+int ghost_collides_with_snack(ghost *ghost, snack *snacks);
+int ghost_collides_with_cherry(ghost *ghost, cherry *cherries);
+int ghost_collides_with_glow_ball(ghost *ghost, glow_ball *glow_ball);
+int ghost_collides_with_ghost(ghost *ghost_1, ghost *ghost_2);
+int ghost_collides_with_wall(ghost *ghost, direction direction);     /* wall object or background? */
 
 /* !!! EVENTS !!! */
 /* destroy snack, cherry and glowing ball */
 void destroy_snack(snack *snack);
 void destroy_cherry(cherry *cherry);
-void destroy_glowing_ball(glowing_ball *glowing_ball);
+void destroy_glow_ball(glow_ball *glow_ball);
 
 /* Initializes/Close gmae session */
-void ini_game_session(Model *model, int lives);
+void ini_game_session(Model *model, int player_count, int player);
 void close_game_session(Model *model);
+void won_game_session(Model *model);
 
 
 /* ghost AI */
 void ghost_roam(ghost *ghost);
 void ghost_chase(ghost *ghost, pacman *pacman);
-void ghost_flee(ghost *ghost, pacman *pacman);
+void ghost_scatter(ghost *ghost, pacman *pacman);
 
 void reset_ghost(ghost *ghost);
 

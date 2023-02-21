@@ -1,7 +1,7 @@
 /*
 	File Name: TST_RAST.C
 
-	Purpose: This file is used to build the bitmaps pixels, and calls 
+	Purpose: This file is used to build the bitmaps pixels, and calls
 	the functions that will display them on the screen.
 
 	Authors: Glenn and Clency
@@ -11,46 +11,382 @@
 #include <osbind.h>
 #include <stdio.h>
 #include "RASTER.H"
-#include "font.h"
-#include "splash.h"
-
-UINT16 paul16[16] = {
-	0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
-	0xC003, 0xC003, 0xF801, 0xFC01, 
-	0xFE01, 0xFC01, 0xF803, 0xC003, 
-	0xE007, 0xF00F, 0xFC3F, 0xFFFF
- 
-};
-
-UINT16 pacman[16] = {
-		0xFFFF, 0xFC3F, 0xF00F, 0xE007, 
-		0xC003, 0xC003, 0xF801, 0xFC01, 
-		0xFE01, 0xFC01, 0xF803, 0xC003, 
-		0xE007, 0xF00F, 0xFC3F, 0xFFFF 
-};
+#include "FONT.H"
+#include "SPLASH.H"
+#include "MAP.H"
+#include "SPRITES.H"
+#include "MODEL.H"
+#include "EVENTS.H"
+#include "RENDERER.H"
 
 void display_splash_screen(char *base);
 
 int main()
 {
 	char *base = Physbase();
-	UINT8 *base8 = (UINT8 *)Physbase();
-	UINT32 *base32 = (UINT32 *)Physbase();
-	UINT16 *base16 = (UINT16 *)Physbase();
-	
-	display_splash_screen(base);
-	
+	Model model;
+	int player_count = 2;
+	int i;
+
+	/* display_splash_screen(base); */
+
+	/*
+	clear_screen(base);
+	plot_screen((UINT32 *)base, (UINT32 *)map_display);
+	plot_bitmap_16((UINT16 *)base, 21, 288, (UINT16 *)pacman_left, 16);
+	plot_bitmap_16((UINT16 *)base, 20, 288, (UINT16 *)snack_sprite, 16);
+	plot_bitmap_16((UINT16 *)base, 25, 176, (UINT16 *)ghost_sprite, 16);
+	print_string_8((UINT8 *)base, 100, 20, "SCORE");
+	print_num((UINT8 *)base, 100, 40, 000000);
+	print_string_8((UINT8 *)base, 500, 20, "SCORE");
+	print_num((UINT8 *)base, 500, 40, 000000);
+
+	plot_bitmap_16((UINT16 *)base, 6 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
+	plot_bitmap_16((UINT16 *)base, 7 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
+
+	plot_bitmap_16((UINT16 *)base, 31 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
+	plot_bitmap_16((UINT16 *)base, 32 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
+
+	plot_bitmap_16((UINT16 *)base, 34, 112, (UINT16 *)glow_ball_sprite, 16);
+	plot_bitmap_16((UINT16 *)base, 7, 112, (UINT16 *)snack_sprite, 16);
+	plot_bitmap_16((UINT16 *)base, 7, 128, (UINT16 *)snack_sprite, 16);
+	plot_bitmap_16((UINT16 *)base, 8, 128, (UINT16 *)snack_sprite, 16);
+	plot_bitmap_16((UINT16 *)base, 9, 128, (UINT16 *)snack_sprite, 16);
+	*/
+
+	ini_game_session(&model, player_count, 0);
+	render(&model, base, player_count, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
+	move_pacman(model.pacman, LEFT, 0);
+	if (pacman_collides_with_snack(&model, 0))
+	{
+		on_snack_eat(&model, 0);
+	}
+	render_snacks(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+
+	render_pacman(model.pacman, (UINT16 *)base, 0);
+
 	return 0;
 }
 
 void display_splash_screen(char *base)
 {
 	/*clear_screen(base);*/
+
 	plot_screen((UINT32 *)base, (UINT32 *)splash_screen);
 
-	plot_pixel(base, 0, 0, black);
-
-	print_string_8(base, 288, 220, "1 PLAYER");
-	print_string_8(base, 288, 250, "2 PLAYERS");
-	print_string_8(base, 212, 325, "MADE BY CLENCY & GLENN - 2023");
+	print_string_8((UINT8 *)base, 288, 220, "1 PLAYER");
+	print_string_8((UINT8 *)base, 288, 250, "2 PLAYERS");
+	print_string_8((UINT8 *)base, 212, 325, "MADE BY CLENCY & GLENN - 2023");
 }

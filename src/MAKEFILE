@@ -1,5 +1,8 @@
-tst_rast: font.o tst_rast.o raster.o rast_asm.o splash.o
-	cc68x -g tst_rast.o raster.o rast_asm.o font.o splash.o -o tst_rast
+tst_rast: font.o tst_rast.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o
+	cc68x -g tst_rast.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o -o tst_rast
+
+events.o: events.c raster.h
+	cc68x -g -c events.c
 
 tst_rast.o: tst_rast.c raster.h 
 	cc68x -g -c tst_rast.c
@@ -12,6 +15,21 @@ font.o: font.c raster.h
 
 splash.o: splash.c raster.h
 	cc68x -g -c splash.c
+
+model.o: model.c raster.h
+	cc68x -g -c model.c
+
+map.o: map.c raster.h
+	cc68x -g -c map.c
+
+renderer.o: renderer.c raster.h
+	cc68x -g -c renderer.c
+
+maze_array.o: maze_array.c raster.h
+	cc68x -g -c maze_array.c
+
+sprites.o: sprites.c raster.h
+	cc68x -g -c sprites.c
 
 rast_asm.o: rast_asm.s
 	gen -D -L2 rast_asm.s

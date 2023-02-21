@@ -41,7 +41,17 @@
     "array": "cpp",
     "CHARACTERS.C": "cpp",
     "MODEL.C": "cpp",
-    "SPLASH.C": "cpp"
+    "SPLASH.C": "cpp",
+    "MAP.C": "cpp",
+    "MAP_ARRAY.C": "cpp",
+    "MAZE_ARRAY.C": "cpp",
+    "RENDERER.C": "cpp",
+    "SPRITES.C": "cpp",
+    "random": "cpp",
+    "EVENTS.C": "cpp",
+    "MAZEARRAY.C": "cpp",
+    "algorithm": "cpp"
   },
-  "C_Cpp.errorSquiggles": "enabled"
+  "C_Cpp.errorSquiggles": "enabled",
+  "C_Cpp_Runner.useAddressSanitizer": false
 }

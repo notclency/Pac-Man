@@ -5,7 +5,7 @@ base		equ		64		; offset from SP, not A6
 
 _clear_screen:	
 		movem.l		d0-7/a0-6,-(sp)
-		lea			white_fill,a0
+		lea			black_fill,a0
 		movem.l		(a0)+,d1-7/a1-6
 		movea.l		base(sp),a0
 		adda.l		#32000,a0
