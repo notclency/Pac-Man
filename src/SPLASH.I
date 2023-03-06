@@ -167,22 +167,33 @@ typedef struct {
  int wcsncmp (const wchar_t *, const wchar_t *, size_t) ;
  wchar_t *wcsncpy (wchar_t *, const wchar_t *, size_t) ;
 # 6 "./types.h" 2
-# 40 "./types.h"
+# 54 "./types.h"
 typedef unsigned char UINT8;
-typedef unsigned int  UINT16;
+typedef unsigned int UINT16;
 typedef unsigned long UINT32;
 
-typedef enum {
+typedef enum
+{
     black = 0xff,
     white = 0x00
 } colors;
 
-typedef enum {
-    LEFT, RIGHT, UP, DOWN, NONE
+typedef enum
+{
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+    NONE
 } direction;
 
-typedef enum mode {
-    NORMAL, SUPER, SCATTER, ROAM, CHASE
+typedef enum mode
+{
+    NORMAL,
+    SUPER,
+    SCATTER,
+    ROAM,
+    CHASE
 } mode;
 # 4 "./splash.h" 2
 

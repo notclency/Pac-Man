@@ -8,18 +8,26 @@ void move_pacman(pacman pacman[], direction direction, int player)
     case UP:
         if ((in_bounds(get_pacman_x(pacman, player), get_pacman_y(pacman, player) - 1) == TRUE) && !is_wall(get_pacman_x(pacman, player), get_pacman_y(pacman, player) - 1))
             pacman[player].direction = UP;
+        else
+            pacman[player].direction = NONE;
         break;
     case DOWN:
         if ((in_bounds(get_pacman_x(pacman, player), get_pacman_y(pacman, player) + 1) == TRUE) && !is_wall(get_pacman_x(pacman, player), get_pacman_y(pacman, player) + 1))
             pacman[player].direction = DOWN;
+        else
+            pacman[player].direction = NONE;
         break;
     case LEFT:
         if ((in_bounds(get_pacman_x(pacman, player) - 1, get_pacman_y(pacman, player)) == TRUE) && !is_wall(get_pacman_x(pacman, player) - 1, get_pacman_y(pacman, player)))
             pacman[player].direction = LEFT;
+        else
+            pacman[player].direction = NONE;
         break;
     case RIGHT:
         if ((in_bounds(get_pacman_x(pacman, player) + 1, get_pacman_y(pacman, player)) == TRUE) && !is_wall(get_pacman_x(pacman, player) + 1, get_pacman_y(pacman, player)))
             pacman[player].direction = RIGHT;
+        else
+            pacman[player].direction = NONE;
         break;
     }
 }

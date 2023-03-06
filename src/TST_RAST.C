@@ -66,55 +66,22 @@ int main()
 	render_scorebox(&model, (UINT8 *)base, 0);
 	render_snacks(&model, (UINT16 *)base, 0);
 
-	move_pacman(model.pacman, LEFT, 0);
-	
-	render_pacman(&model, (UINT16 *)base, 0);
-	if (pacman_collides_with_snack(&model, 0))
+	while (1)
 	{
-		on_snack_eat(&model, 0);
+		UINT32 key = Cconis();
+		key = Cnecin();
+
+		on_pacman_move(&model, key, 0);
+		
+		if (pacman_collides_with_snack(&model, 0)) {
+			on_snack_eat(&model, 0);
+		}
+		render_scorebox(&model, (UINT8 *)base, 0);
+		render_snacks(&model, (UINT16 *)base, 0);
+		render_pacman(&model, (UINT16 *)base, 0);
+
+		key = 0x00000000;
 	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-	
-	render_pacman(&model, (UINT16 *)base, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-	
-	render_pacman(&model, (UINT16 *)base, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-	
-	render_pacman(&model, (UINT16 *)base, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-	
-	render_pacman(&model, (UINT16 *)base, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-	
-	render_pacman(&model, (UINT16 *)base, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
 
 	/*
 	move_pacman(model.pacman, LEFT, 0);

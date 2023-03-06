@@ -18,9 +18,23 @@
 #define DOWN_KEY 0x00500000
 #define ENTER_KEY 0x001C000D
 
+/*
+right
+left
+up
+down
+space*/
+/*
+#define RIGHT_KEY 0x00000061
+#define LEFT_KEY 0x00000064
+#define UP_KEY 0x00000077
+#define DOWN_KEY 0x00000073
+#define space_KEY 0x00000020 /
+*/
+
 #define SCREEN_HEIGHT 640
 #define SCREEN_WIDTH 400
- 
+
 #define SCREEN_BMP 8000
 #define MAP_BMP 4080
 
@@ -38,20 +52,31 @@
 #define GHOST_SCARED_SPEED 5
 
 typedef unsigned char UINT8;
-typedef unsigned int  UINT16;
+typedef unsigned int UINT16;
 typedef unsigned long UINT32;
 
-typedef enum {
+typedef enum
+{
     black = 0xff,
     white = 0x00
 } colors;
 
-typedef enum {
-    LEFT, RIGHT, UP, DOWN, NONE
+typedef enum
+{
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+    NONE
 } direction;
 
-typedef enum mode {
-    NORMAL, SUPER, SCATTER, ROAM, CHASE
+typedef enum mode
+{
+    NORMAL,
+    SUPER,
+    SCATTER,
+    ROAM,
+    CHASE
 } mode;
 
 #endif
