@@ -6,25 +6,35 @@ void move_pacman(pacman pacman[], direction direction, int player)
     switch (direction)
     {
     case UP:
-        if ((in_bounds(pacman[player].x, pacman[player].y - PACMAN_MOVE_SPEED) == TRUE) && (maze_array[pacman[player].y - PACMAN_MOVE_SPEED][pacman[player].x] != 1))
-            pacman->y -= PACMAN_MOVE_SPEED;
+        if ((in_bounds(get_pacman_x(pacman, player), get_pacman_y(pacman, player) - 1) == TRUE) && !is_wall(get_pacman_x(pacman, player), get_pacman_y(pacman, player) - 1))
+            pacman[player].direction = UP;
         break;
     case DOWN:
-        if ((in_bounds(pacman[player].x, pacman[player].y + PACMAN_MOVE_SPEED) == TRUE) && (maze_array[pacman[player].y + PACMAN_MOVE_SPEED][pacman[player].x] != 1))
-            pacman->y += PACMAN_MOVE_SPEED;
+        if ((in_bounds(get_pacman_x(pacman, player), get_pacman_y(pacman, player) + 1) == TRUE) && !is_wall(get_pacman_x(pacman, player), get_pacman_y(pacman, player) + 1))
+            pacman[player].direction = DOWN;
         break;
     case LEFT:
-        if ((in_bounds(pacman[player].x - PACMAN_MOVE_SPEED, pacman[player].y) == TRUE) && (maze_array[pacman[player].y][pacman[player].x - PACMAN_MOVE_SPEED] != 1))
-            pacman->x -= PACMAN_MOVE_SPEED;
+        if ((in_bounds(get_pacman_x(pacman, player) - 1, get_pacman_y(pacman, player)) == TRUE) && !is_wall(get_pacman_x(pacman, player) - 1, get_pacman_y(pacman, player)))
+            pacman[player].direction = LEFT;
         break;
     case RIGHT:
-        if ((in_bounds(pacman[player].x + PACMAN_MOVE_SPEED, pacman[player].y) == TRUE) && (maze_array[pacman[player].y][pacman[player].x + PACMAN_MOVE_SPEED] != 1))
-            pacman->x += PACMAN_MOVE_SPEED;
+        if ((in_bounds(get_pacman_x(pacman, player) + 1, get_pacman_y(pacman, player)) == TRUE) && !is_wall(get_pacman_x(pacman, player) + 1, get_pacman_y(pacman, player)))
+            pacman[player].direction = RIGHT;
         break;
     }
 }
 
-void move_ghost(ghost *ghost, pacman pacman[], int player)
+int get_pacman_x(pacman pacman[], int player)
+{
+    return (pacman[player].x / 16) - ALIGN_ITEM_X;
+}
+
+int get_pacman_y(pacman pacman[], int player)
+{
+    return (pacman[player].y / 16) - ALIGN_ITEM_Y;
+}
+
+void move_ghost(ghost *ghost, pacman *pacman)
 {
     switch (ghost->mode)
     {
@@ -32,10 +42,10 @@ void move_ghost(ghost *ghost, pacman pacman[], int player)
         ghost_roam(ghost);
         break;
     case CHASE:
-        ghost_chase(ghost, &pacman[player]);
+        ghost_chase(ghost, pacman);
         break;
     case SCATTER:
-        ghost_scatter(ghost, &pacman[player]);
+        ghost_scatter(ghost, pacman);
         break;
     }
 }
@@ -44,7 +54,6 @@ void ini_snacks(Model *model)
 {
     int i;
     int j;
-    int count = 0;
 
     for (i = 0; i < MAZE_ARRAY_HEIGHT; i++)
     {
@@ -52,10 +61,9 @@ void ini_snacks(Model *model)
         {
             if (snack_array[i][j] == 0)
             {
-                model->snacks[count].x = j;
-                model->snacks[count].y = i;
-                model->snacks[count].eaten = FALSE;
-                count++;
+                model->snacks[MAZE_ARRAY_WIDTH * i + j].x = j;
+                model->snacks[MAZE_ARRAY_WIDTH * i + j].y = i;
+                model->snacks[MAZE_ARRAY_WIDTH * i + j].eaten = FALSE;
             }
         }
     }
@@ -150,18 +158,18 @@ void update_livebox(Model *model, int player)
 
 void ini_pacman(Model *model, int player_count, int player)
 {
-    model->pacman[player].x = 15;
-    model->pacman[player].y = 13;
-    model->pacman[player].direction = LEFT;
+    model->pacman[player].x = (15 + ALIGN_ITEM_X) * 16;
+    model->pacman[player].y = (13 + ALIGN_ITEM_Y) * 16;
+    model->pacman[player].direction = NONE;
     model->pacman[player].is_dead = FALSE;
     model->pacman[player].lives = 3;
     model->pacman[player].score = 0;
 
     if (player_count == 2)
     {
-        model->pacman[1].x = 15;
-        model->pacman[1].y = 13;
-        model->pacman[1].direction = LEFT;
+        model->pacman[1].x = (15 + ALIGN_ITEM_X) * 16;
+        model->pacman[1].y = (13 + ALIGN_ITEM_Y) * 16;
+        model->pacman[1].direction = NONE;
         model->pacman[1].is_dead = FALSE;
         model->pacman[1].lives = 3;
         model->pacman[1].score = 0;
@@ -201,43 +209,34 @@ void destroy_glow_ball(glow_ball *glow_ball)
 
 void ghost_roam(ghost *ghost)
 {
-    direction ghost_directon = ghost->direction;
+    ghost->direction = (direction)(rand() % 4);
 
-    if (ghost_directon == LEFT)
+    while (1)
     {
-        if ((in_bounds(ghost->x - GHOST_MOVE_SPEED, ghost->y) == TRUE) && (maze_array[ghost->y][ghost->x - GHOST_MOVE_SPEED] != 1))
-            ghost->x -= GHOST_MOVE_SPEED;
+        if (ghost->direction == UP && !is_wall(ghost->x, ghost->y - 1))
+        {
+            ghost->y--;
+            return;
+        }
+        else if (ghost->direction == DOWN && !is_wall(ghost->x, ghost->y + 1))
+        {
+            ghost->y++;
+            return;
+        }
+        else if (ghost->direction == LEFT && !is_wall(ghost->x - 1, ghost->y))
+        {
+            ghost->x--;
+            return;
+        }
+        else if (ghost->direction == RIGHT && !is_wall(ghost->x + 1, ghost->y))
+        {
+            ghost->x++;
+            return;
+        }
         else
+        {
             ghost->direction = (direction)(rand() % 4);
-        return;
-    }
-    else if (ghost_directon == RIGHT)
-    {
-        if ((in_bounds(ghost->x + GHOST_MOVE_SPEED, ghost->y) == TRUE) && (maze_array[ghost->y][ghost->x + GHOST_MOVE_SPEED] != 1))
-            ghost->x += GHOST_MOVE_SPEED;
-        else
-            ghost->direction = (direction)(rand() % 4);
-        return;
-        /* ghost->direction = direction(rand() % 4); */
-    }
-    else if (ghost_directon == UP)
-    {
-        if ((in_bounds(ghost->x, ghost->y - GHOST_MOVE_SPEED) == TRUE) && (maze_array[ghost->y - GHOST_MOVE_SPEED][ghost->x] != 1))
-            ghost->y -= GHOST_MOVE_SPEED;
-        else
-            ghost->direction = (direction)(rand() % 4);
-
-        return;
-        /* ghost->direction = direction(rand() % 4); */
-    }
-    else if (ghost_directon == DOWN)
-    {
-        if ((in_bounds(ghost->x, ghost->y + GHOST_MOVE_SPEED) == TRUE) && (maze_array[ghost->y + GHOST_MOVE_SPEED][ghost->x] != 1))
-            ghost->y += GHOST_MOVE_SPEED;
-        else
-            ghost->direction = (direction)(rand() % 4);
-        return;
-        /* ghost->direction = direction(rand() % 4); */
+        }
     }
 }
 
@@ -267,15 +266,16 @@ void ghost_scatter(ghost *ghost, pacman *pacman)
 
 int pacman_collides_with_snack(Model *model, int player)
 {
-    int i;
+    int pacman_x = (model->pacman[player].x / 16) - ALIGN_ITEM_X;
+    int pacman_y = (model->pacman[player].y / 16) - ALIGN_ITEM_Y;
 
-    for (i = 0; i < 197; i++)
+    int snack_x = model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].x;
+    int snack_y = model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].y;
+
+    if ((pacman_x == snack_x) && (pacman_y == snack_y) && (model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten == FALSE))
     {
-        if ((model->pacman[player].x == model->snacks[i].x) && (model->pacman[player].y == model->snacks[i].y))
-        {
-            model->snacks[i].eaten = TRUE;
-            return 1;
-        }
+        /* model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten = TRUE; */
+        return 1;
     }
 
     return 0;
@@ -284,10 +284,12 @@ int pacman_collides_with_snack(Model *model, int player)
 int pacman_collides_with_cherry(Model *model, int player)
 {
     int i;
+    int pacman_x = (model->pacman[player].x / 16) - ALIGN_ITEM_X;
+    int pacman_y = (model->pacman[player].y / 16) - ALIGN_ITEM_Y;
 
     for (i = 0; i < 4; i++)
     {
-        if ((model->pacman[player].x == model->cherries[i].x) && (model->pacman[player].y == model->cherries[i].y) && (model->cherries[i].eaten == FALSE))
+        if ((pacman_x == model->cherries[i].x) && (pacman_y == model->cherries[i].y) && (model->cherries[i].eaten == FALSE))
         {
             model->cherries[i].eaten = TRUE;
             return 1;
@@ -447,4 +449,9 @@ void close_game_session(Model *model)
 void won_game_session(Model *model)
 {
     model->game_won = TRUE;
+}
+
+int is_wall(int x, int y)
+{
+    return (maze_array[y][x] == 1);
 }

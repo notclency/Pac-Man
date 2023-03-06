@@ -47,7 +47,7 @@ typedef enum {
 } colors;
 
 typedef enum {
-    LEFT, RIGHT, UP, DOWN
+    LEFT, RIGHT, UP, DOWN, NONE
 } direction;
 
 typedef enum mode {

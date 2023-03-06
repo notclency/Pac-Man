@@ -86,7 +86,7 @@ typedef struct {
     int game_over;
     int game_won;
     ghost ghosts[3];
-    snack snacks[196];
+    snack snacks[510];
     cherry cherries[4];
     glow_ball glow_balls[4];
     scorebox scorebox[2];
@@ -108,6 +108,9 @@ typedef struct {
 */
 void move_pacman(pacman pacman[], direction direction, int player);
 
+int get_pacman_x(pacman pacman[], int player);
+int get_pacman_y(pacman pacman[], int player);
+
 /* Initialize objects on screen */
 
 /*
@@ -121,7 +124,7 @@ void move_pacman(pacman pacman[], direction direction, int player);
     return:
         void
 */
-void move_ghost(ghost *ghost, pacman pacman[], int player);
+void move_ghost(ghost *ghost, pacman *pacman);
 
 /*
     paramters:
@@ -230,6 +233,8 @@ void ini_pacman(Model *model, int player_count, int player);
         void
 */
 void ini_ghosts(Model *model);
+
+int is_wall(int x, int y);
 
 void reset_pacman_mode(pacman pacman[], int player);
 void reset_ghost_mode(ghost *ghost);

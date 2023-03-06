@@ -20,12 +20,13 @@
 #include "RENDERER.H"
 
 void display_splash_screen(char *base);
+void process_async_events(Model *model, int player_count);
 
 int main()
 {
 	char *base = Physbase();
 	Model model;
-	int player_count = 2;
+	int player_count = 1;
 	int i;
 
 	/* display_splash_screen(base); */
@@ -54,56 +55,60 @@ int main()
 	plot_bitmap_16((UINT16 *)base, 9, 128, (UINT16 *)snack_sprite, 16);
 	*/
 
+	/*
+	clear_screen(base);
+	plot_bitmap_16_2((UINT16 *)base, 1, 0, (UINT16 *)pacman_left, 16);
+	*/
+
+	plot_screen((UINT32 *)base, (UINT32 *)map_display);
 	ini_game_session(&model, player_count, 0);
-	render(&model, base, player_count, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_scorebox(&model, (UINT8 *)base, 0);
+	render_snacks(&model, (UINT16 *)base, 0);
 
 	move_pacman(model.pacman, LEFT, 0);
+	
+	render_pacman(&model, (UINT16 *)base, 0);
 	if (pacman_collides_with_snack(&model, 0))
 	{
 		on_snack_eat(&model, 0);
 	}
 	render_snacks(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
+	
+	render_pacman(&model, (UINT16 *)base, 0);
 	if (pacman_collides_with_snack(&model, 0))
 	{
 		on_snack_eat(&model, 0);
 	}
 	render_snacks(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
+	
+	render_pacman(&model, (UINT16 *)base, 0);
 	if (pacman_collides_with_snack(&model, 0))
 	{
 		on_snack_eat(&model, 0);
 	}
 	render_snacks(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
+	
+	render_pacman(&model, (UINT16 *)base, 0);
 	if (pacman_collides_with_snack(&model, 0))
 	{
 		on_snack_eat(&model, 0);
 	}
 	render_snacks(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
+	
+	render_pacman(&model, (UINT16 *)base, 0);
 	if (pacman_collides_with_snack(&model, 0))
 	{
 		on_snack_eat(&model, 0);
 	}
 	render_snacks(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
+	
+	render_pacman(&model, (UINT16 *)base, 0);
 	if (pacman_collides_with_snack(&model, 0))
 	{
 		on_snack_eat(&model, 0);
@@ -111,271 +116,49 @@ int main()
 	render_snacks(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
 
-	render_pacman(model.pacman, (UINT16 *)base, 0);
+	/*
 	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	*/
 
-	render_pacman(model.pacman, (UINT16 *)base, 0);
+	/*
+	move_pacman(model.pacman, UP, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
 
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
+	move_pacman(model.pacman, RIGHT, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
 
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
+	move_pacman(model.pacman, RIGHT, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
 
-	render_pacman(model.pacman, (UINT16 *)base, 0);
+	move_pacman(model.pacman, DOWN, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	render_pacman(&model, (UINT16 *)base, 0);
+	*/
 
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
+	/*
+	clear_screen(base);
+	plot_bitmap_16((UINT16 *)base, 0, 0, (UINT16 *)pacman_left, 16);
+	plot_bitmap_16_2((UINT16 *)base, 2, 16, (UINT16 *)pacman_left, 16);
+	plot_bitmap_16_2((UINT16 *)base, 3, 32, (UINT16 *)pacman_left, 16);
+	plot_bitmap_16_2((UINT16 *)base, 4, 48, (UINT16 *)pacman_left, 16);
+	*/
 
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
-
-	move_pacman(model.pacman, LEFT, 0);
-	if (pacman_collides_with_snack(&model, 0))
-	{
-		on_snack_eat(&model, 0);
-	}
-	render_snacks(&model, (UINT16 *)base, 0);
-	render_scorebox(&model, (UINT8 *)base, 0);
-
-	render_pacman(model.pacman, (UINT16 *)base, 0);
+	/* plot_bitmap_16_2((UINT16 *)base, 0, 0, (UINT16 *)pacman_left, 16); */
 
 	return 0;
 }
@@ -389,4 +172,9 @@ void display_splash_screen(char *base)
 	print_string_8((UINT8 *)base, 288, 220, "1 PLAYER");
 	print_string_8((UINT8 *)base, 288, 250, "2 PLAYERS");
 	print_string_8((UINT8 *)base, 212, 325, "MADE BY CLENCY & GLENN - 2023");
+}
+
+void process_async_events(Model *model, int player_count)
+{
+	UINT32 input;
 }

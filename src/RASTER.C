@@ -172,6 +172,28 @@ void plot_bitmap_16(UINT16 *base, int x, int y, const UINT16 *bitmap, unsigned i
 	}
 }
 
+void plot_bitmap_16_2(UINT16 *base, int x, int y, const UINT16 *bitmap, unsigned int height)
+{
+	int i;
+
+	UINT16 mask_1 = 0xFFFF;
+	UINT16 mask_2 = 0xFFFF;
+	
+	for (i = 0; i < height; i++)
+	{
+		*(base + (y * 40) + (x / 16)) = (bitmap[i] >> (x % 16));
+		*(base + (y * 40) + (x / 16)) |= ((mask_1 >> (x % 16)) ^ 0xFFFF);
+
+
+		if (x % 16 != 0) {
+			*(base + (y * 40) + ((x / 16) + 1)) = bitmap[i] << (16 - (x % 16));
+			*(base + (y * 40) + ((x / 16) + 1)) |= ((mask_2 << (16 - (x % 16))) ^ 0xFFFF);
+		}
+
+		y++;
+	}
+}
+
 void plot_bitmap_32(UINT32 *base, int x, int y, const UINT32 *bitmap, unsigned int height)
 {
 	int i;

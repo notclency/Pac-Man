@@ -35,4 +35,6 @@ void print_num(UINT8 *base, int x, int y, UINT16 num);
 void plot_screen(UINT32 *base, UINT32 *bitmap);
 void plot_map(UINT32 *base, UINT32 *map);
 
+void plot_bitmap_16_2(UINT16 *base,int x, int y, const UINT16 *bitmap, unsigned int height);
+
 #endif

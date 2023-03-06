@@ -6,9 +6,10 @@ void render(Model *model, char *base, int player_count, int player)
     plot_screen((UINT32 *)base, (UINT32 *)map_display);
     render_glow_balls(model, (UINT16 *)base, player);
 
-    render_pacman(model->pacman, (UINT16 *)base, player);
+    render_pacman(model, (UINT16 *)base, player);
+    render_ghosts(model, (UINT16 *)base);
+
     render_snacks(model, (UINT16 *)base, player);
-    render_ghosts(model->ghosts, (UINT16 *)base);
     render_scorebox(model, (UINT8 *)base, player_count);
     render_livebox(model, (UINT16 *)base, player_count);
     /*
@@ -19,24 +20,84 @@ void render(Model *model, char *base, int player_count, int player)
     */
 }
 
-void render_pacman(pacman *pacman, UINT16 *base, int player)
+void render_pacman(Model *model, UINT16 *base, int player)
 {
+    int i;
+
     /* render according ot direction */
-    if (pacman->is_dead == FALSE)
+    if (model->pacman[player].is_dead == FALSE)
     {
-        plot_bitmap_16(base, pacman[player].x + ALIGN_ITEM_X, (pacman[player].y + ALIGN_ITEM_Y) * 16, pacman_left, CHARACTER_SIZE);
+        switch (model->pacman[player].direction)
+        {
+        case UP:
+            if ((in_bounds(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) - 1) == TRUE) && !is_wall(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) - 1))
+            {
+                for (i = 1; i <= 16; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 16;
+            }
+            break;
+
+        case DOWN:
+            if ((in_bounds(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) + 1) == TRUE) && !is_wall(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) + 1))
+            {
+                for (i = 1; i <= 16; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 16;
+            }
+            break;
+
+        case LEFT:
+            if ((in_bounds(get_pacman_x(model->pacman, player) - 1, get_pacman_y(model->pacman, player)) == TRUE) && !is_wall(get_pacman_x(model->pacman, player) - 1, get_pacman_y(model->pacman, player)))
+            {
+                for (i = 1; i <= 16; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 16;
+            }
+            break;
+
+        case RIGHT:
+            if ((in_bounds(get_pacman_x(model->pacman, player) + 1, get_pacman_y(model->pacman, player)) == TRUE) && !is_wall(get_pacman_x(model->pacman, player) + 1, get_pacman_y(model->pacman, player)))
+            {
+                for (i = 1; i <= 16; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                }
+
+                model->pacman[player].x += 16;
+            }
+            break;
+
+        case NONE:
+            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+            break;
+        }
     }
 }
 
-void render_ghosts(ghost ghosts[], UINT16 *base)
+void render_ghosts(Model *model, UINT16 *base)
 {
     int i;
-    /* render according to state & direction */
+    /* render according to mode & direction */
+
     for (i = 0; i < 3; i++)
     {
-        if (ghosts[i].is_dead == FALSE)
+        if (model->ghosts[i].is_dead == FALSE)
         {
-            plot_bitmap_16(base, ghosts[i].x + ALIGN_ITEM_X, (ghosts[i].y + ALIGN_ITEM_Y) * 16, ghost_sprite, CHARACTER_SIZE);
+            if (model->ghosts[i].mode == SCATTER)
+            {
+                plot_bitmap_16(base, model->ghosts[i].x + ALIGN_ITEM_X, (model->ghosts[i].y + ALIGN_ITEM_Y) * 16, ghost_scatter_sprite, CHARACTER_SIZE);
+            }
+            else
+            {
+                plot_bitmap_16(base, model->ghosts[i].x + ALIGN_ITEM_X, (model->ghosts[i].y + ALIGN_ITEM_Y) * 16, ghost_sprite, CHARACTER_SIZE);
+            }
         }
     }
 }
@@ -44,14 +105,19 @@ void render_ghosts(ghost ghosts[], UINT16 *base)
 void render_snacks(Model *model, UINT16 *base, int player)
 {
     int i;
+    int j;
 
-    for (i = 0; i < 196; i++)
+    for (i = 0; i < MAZE_ARRAY_HEIGHT; i++)
     {
-        if (model->snacks[i].eaten == FALSE)
+        for (j = 0; j < MAZE_ARRAY_WIDTH; j++)
         {
-            plot_bitmap_16(base, model->snacks[i].x + ALIGN_ITEM_X, (model->snacks[i].y + ALIGN_ITEM_Y) * 16, snack_sprite, CHARACTER_SIZE);
-        } else {
-            plot_bitmap_16(base, model->snacks[i].x + ALIGN_ITEM_X, (model->snacks[i].y + ALIGN_ITEM_Y) * 16, emp, CHARACTER_SIZE);
+            if (snack_array[i][j] == 0)
+            {
+                if (model->snacks[MAZE_ARRAY_WIDTH * i + j].eaten == FALSE)
+                {
+                    plot_bitmap_16(base, model->snacks[MAZE_ARRAY_WIDTH * i + j].x + ALIGN_ITEM_X, (model->snacks[MAZE_ARRAY_WIDTH * i + j].y + ALIGN_ITEM_Y) * 16, snack_sprite, CHARACTER_SIZE);
+                }
+            }
         }
     }
 }
@@ -75,9 +141,13 @@ void render_glow_balls(Model *model, UINT16 *base, int player)
 
     for (i = 0; i < 4; i++)
     {
-        if (model->glow_balls[i].eaten == FALSE && pacman_collides_with_glow_ball(model, player) == FALSE)
+        if (model->glow_balls[i].eaten == FALSE)
         {
             plot_bitmap_16(base, model->glow_balls[i].x + ALIGN_ITEM_X, (model->glow_balls[i].y + ALIGN_ITEM_Y) * 16, glow_ball_sprite, CHARACTER_SIZE);
+        }
+        else
+        {
+            plot_bitmap_16(base, model->glow_balls[i].x + ALIGN_ITEM_X, (model->glow_balls[i].y + ALIGN_ITEM_Y) * 16, emp, CHARACTER_SIZE);
         }
     }
 }

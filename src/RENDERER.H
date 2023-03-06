@@ -8,13 +8,14 @@
 #include "map.h"
 #include "model.h"
 #include "sprites.h"
+#include "events.h"
 /* #include "MAZE_ARRAY.H" */
 
 void render(Model *model, char *base, int player_count, int player);
 
-void render_pacman(pacman *pacman, UINT16 *base, int player);
+void render_pacman(Model *model, UINT16 *base, int player);
 
-void render_ghosts(ghost ghosts[], UINT16 *base);
+void render_ghosts(Model *model, UINT16 *base);
 
 void render_snacks(Model *model, UINT16 *base, int player);
 

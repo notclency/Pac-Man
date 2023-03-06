@@ -16,7 +16,7 @@ extern const UINT16 cherry_sprite[16];
 extern const UINT16 glow_ball_sprite[16];
 
 extern const UINT16 ghost_sprite[16];
-extern const UINT16 ghost_scared[16];
+extern const UINT16 ghost_scatter_sprite[16];
 
 
 #define MAZE_ARRAY_HEIGHT 17

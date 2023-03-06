@@ -21,16 +21,23 @@ void on_pacman_move(Model *model, UINT32 key, int player)
 
 void on_ghost_move(Model *model, int player)
 {
+
+    /* chase option */
+
     int i = 0;
     for (i = 0; i < 3; i++)
     {
-        move_ghost(&model->ghosts[i], model->pacman, player);
+        move_ghost(&model->ghosts[i], &model->pacman[player]);
     }
 }
 
 void on_snack_eat(Model *model, int player)
 {
+    int pacman_x = get_pacman_x(model->pacman, player);
+    int pacman_y = get_pacman_y(model->pacman, player);
+
     model->pacman[player].score += 50;
+    model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten = TRUE;
     update_scorebox(model, player);
 }
 
@@ -69,12 +76,21 @@ void on_ghost_eat(Model *model, int player)
                 model->ghosts[i].is_dead = TRUE;
                 update_scorebox(model, player);
 
+                /* initialize single ghost function */
                 model->ghosts[i].x = 19;
                 model->ghosts[i].y = 6;
+                model->ghosts[i].mode = ROAM;
             }
             else
             {
+                /* initialize pacman & reduce lives */
                 model->pacman[player].lives--;
+
+                if (model->pacman[player].lives == 0)
+                {
+                    on_game_over(model);
+                }
+
                 model->pacman[player].x = 15;
                 model->pacman[player].y = 13;
                 model->pacman[player].mode = NORMAL;
