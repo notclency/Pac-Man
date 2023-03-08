@@ -72,13 +72,14 @@ int main()
 		key = Cnecin();
 
 		on_pacman_move(&model, key, 0);
-		
-		if (pacman_collides_with_snack(&model, 0)) {
+		render_pacman(&model, (UINT16 *)base, 0);
+
+		if (pacman_collides_with_snack(&model, 0))
+		{
 			on_snack_eat(&model, 0);
 		}
 		render_scorebox(&model, (UINT8 *)base, 0);
 		render_snacks(&model, (UINT16 *)base, 0);
-		render_pacman(&model, (UINT16 *)base, 0);
 
 		key = 0x00000000;
 	}

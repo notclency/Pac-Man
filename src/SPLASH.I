@@ -167,7 +167,95 @@ typedef struct {
  int wcsncmp (const wchar_t *, const wchar_t *, size_t) ;
  wchar_t *wcsncpy (wchar_t *, const wchar_t *, size_t) ;
 # 6 "./types.h" 2
-# 54 "./types.h"
+# 1 "C:/c68/include/unistd.h" 1
+# 79 "C:/c68/include/unistd.h"
+ int		lockf	(int, int, long) ;
+
+
+
+ void  _exit	(int) ;
+ int	access	(const char *, int) ;
+ unsigned alarm	(unsigned) ;
+ int	chdir	(const char *) ;
+ int	chown	(const char *, int, int) ;
+ int	close	(int) ;
+ int	dup	(int) ;
+ int	dup2	(int, int) ;
+ int	execl	(const char *, ...) ;
+ int	execle	(const char *, ...) ;
+ int	execlp	(const char *, ...) ;
+ int	execv	(const char *, char *const *) ;
+ int	execve	(const char *, char *const *, char *const *) ;
+ int	execvp	(const char *, char *const *) ;
+ int	fork	(void) ;
+ char *	getcwd	(char *, int) ;
+ unsigned short 	getegid	(void) ;
+ unsigned short 	geteuid	(void) ;
+ unsigned short 	getgid	(void) ;
+ int	getgroups (int, unsigned short  *) ;
+ char *	getlogin (void) ;
+ int	getpid	(void) ;
+ int	getppid	(void) ;
+ unsigned short 	getuid	(void) ;
+ int	isatty	(int) ;
+ int	link	(const char *oldname, const char *newname) ;
+ long	lseek	(int, long, int) ;
+ int	pause	(void) ;
+ int	pipe	(int *) ;
+ long	pathconf (const char *, int) ;
+ int	rmdir	(const char *) ;
+ int	read	(int, void *, unsigned) ;
+ int	setgid	(int) ;
+ int	setuid	(int) ;
+ unsigned sleep	(unsigned int) ;
+ long	sysconf	(int) ;
+ char *	ttyname	(int) ;
+ int	unlink	(const char *) ;
+ int	write	(int, const void *, unsigned) ;
+
+
+ int	_bsd_getpgrp (int) ;
+ int	_bsd_setpgrp (int, int) ;
+ char *	getwd	(char *) ;
+ int	getopt	(int, char * const *, const char *) ;
+ int	getpagesize (void) ;
+ char *	getpass	(const char *prompt) ;
+ char *	initstate (unsigned int seed, char *arg_state, int n) ;
+
+
+ char *	mktemp	(char *) ;
+
+ void	psignal	(int, const char *) ;
+ long 	random	(void) ;
+ long	_read	(int, void *, unsigned long) ;
+ int	readlink (char *filename, char *linkto, int siz) ;
+ void *	sbrk	(unsigned long ) ;
+ void *	_sbrk	(long) ;
+ int	setegid	(int) ;
+ int	seteuid	(int) ;
+ int	setregid (int, int) ;
+ int	setreuid (int, int) ;
+ char *	setstate (char *arg_state) ;
+ void	sigpause (long mask) ;
+ void	srandom	(unsigned int seed) ;
+ int	stime	(long *) ;
+ int	symlink (const char *oldname, const char *newname) ;
+ long	tell	(int) ;
+ void	usleep	(unsigned long) ;
+ int	vfork	(void) ;
+ long	_write	(int, const void *, unsigned long) ;
+# 170 "C:/c68/include/unistd.h"
+ int 	getpgrp	(void) ;
+
+ int	setpgrp	(void) ;
+
+
+ int	setpgid (int , int ) ;
+ int	setsid (void) ;
+ int 	tcgetpgrp	(int fd) ;
+ int	tcsetpgrp	(int fd, int  pgrp) ;
+# 7 "./types.h" 2
+# 55 "./types.h"
 typedef unsigned char UINT8;
 typedef unsigned int UINT16;
 typedef unsigned long UINT32;

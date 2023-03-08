@@ -9,7 +9,7 @@
 typedef struct {
     unsigned int x, y;
     int delta_x, delta_y;   /* displcement per clock tick / speed */
-    direction direction;
+    direction direction, last_direction;
     int lives;
     int score;
     int is_dead;

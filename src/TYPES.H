@@ -4,6 +4,7 @@
 /* #include <random> */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define PLAYER_1 0
 #define PLAYER_2 1

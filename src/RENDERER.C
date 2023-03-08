@@ -32,51 +32,163 @@ void render_pacman(Model *model, UINT16 *base, int player)
         case UP:
             if ((in_bounds(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) - 1) == TRUE) && !is_wall(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) - 1))
             {
-                for (i = 1; i <= 16; i++)
+                for (i = 0; i < 2; i++)
                 {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_left, CHARACTER_SIZE);
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
                 }
-                model->pacman[player].y -= 16;
+                model->pacman[player].y -= 2;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up_open, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_closed, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 2;
             }
             break;
 
         case DOWN:
             if ((in_bounds(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) + 1) == TRUE) && !is_wall(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) + 1))
             {
-                for (i = 1; i <= 16; i++)
+                
+                for (i = 0; i < 2; i++)
                 {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_left, CHARACTER_SIZE);
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
                 }
-                model->pacman[player].y += 16;
+                model->pacman[player].y += 2;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down_open, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_closed, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 2;
             }
             break;
 
         case LEFT:
             if ((in_bounds(get_pacman_x(model->pacman, player) - 1, get_pacman_y(model->pacman, player)) == TRUE) && !is_wall(get_pacman_x(model->pacman, player) - 1, get_pacman_y(model->pacman, player)))
             {
-                for (i = 1; i <= 16; i++)
+                for (i = 0; i < 2; i++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
                 }
-                model->pacman[player].x -= 16;
+                model->pacman[player].x -= 2;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left_open, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 2;
             }
             break;
 
         case RIGHT:
             if ((in_bounds(get_pacman_x(model->pacman, player) + 1, get_pacman_y(model->pacman, player)) == TRUE) && !is_wall(get_pacman_x(model->pacman, player) + 1, get_pacman_y(model->pacman, player)))
             {
-                for (i = 1; i <= 16; i++)
+                for (i = 0; i < 2; i++)
                 {
-                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
                 }
+                model->pacman[player].x += 2;
 
-                model->pacman[player].x += 16;
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right_open, CHARACTER_SIZE);
+                }
+                model->pacman[player].x += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                }
+                model->pacman[player].x += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
+                }
+                model->pacman[player].x += 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                }
+                model->pacman[player].x += 2;
             }
             break;
 
         case NONE:
-            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
-            break;
+            switch (model->pacman[player].last_direction)
+            {
+            case UP:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_up, CHARACTER_SIZE);
+                break;
+
+            case DOWN:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_down, CHARACTER_SIZE);
+                break;
+
+            case LEFT:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                break;
+
+            case RIGHT:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                break;
+            }
         }
     }
 }
@@ -107,6 +219,9 @@ void render_snacks(Model *model, UINT16 *base, int player)
     int i;
     int j;
 
+    int snack_x;
+    int snack_y;
+
     for (i = 0; i < MAZE_ARRAY_HEIGHT; i++)
     {
         for (j = 0; j < MAZE_ARRAY_WIDTH; j++)
@@ -115,7 +230,11 @@ void render_snacks(Model *model, UINT16 *base, int player)
             {
                 if (model->snacks[MAZE_ARRAY_WIDTH * i + j].eaten == FALSE)
                 {
-                    plot_bitmap_16(base, model->snacks[MAZE_ARRAY_WIDTH * i + j].x + ALIGN_ITEM_X, (model->snacks[MAZE_ARRAY_WIDTH * i + j].y + ALIGN_ITEM_Y) * 16, snack_sprite, CHARACTER_SIZE);
+                    if ((snack_x == get_pacman_x(model->pacman, 0) && (snack_y == get_pacman_y(model->pacman, 0))) == FALSE) {
+                        plot_bitmap_16(base, model->snacks[MAZE_ARRAY_WIDTH * i + j].x + ALIGN_ITEM_X, (model->snacks[MAZE_ARRAY_WIDTH * i + j].y + ALIGN_ITEM_Y) * 16, snack_sprite, CHARACTER_SIZE);
+                    } else {
+                        plot_bitmap_16(base, model->snacks[MAZE_ARRAY_WIDTH * i + j].x + ALIGN_ITEM_X, (model->snacks[MAZE_ARRAY_WIDTH * i + j].y + ALIGN_ITEM_Y) * 16, emp, CHARACTER_SIZE);
+                    }
                 }
             }
         }

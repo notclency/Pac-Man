@@ -9,25 +9,37 @@ void move_pacman(pacman pacman[], direction direction, int player)
         if ((in_bounds(get_pacman_x(pacman, player), get_pacman_y(pacman, player) - 1) == TRUE) && !is_wall(get_pacman_x(pacman, player), get_pacman_y(pacman, player) - 1))
             pacman[player].direction = UP;
         else
+        {
+            pacman[player].last_direction = pacman[player].direction;
             pacman[player].direction = NONE;
+        }
         break;
     case DOWN:
         if ((in_bounds(get_pacman_x(pacman, player), get_pacman_y(pacman, player) + 1) == TRUE) && !is_wall(get_pacman_x(pacman, player), get_pacman_y(pacman, player) + 1))
             pacman[player].direction = DOWN;
         else
+        {
+            pacman[player].last_direction = pacman[player].direction;
             pacman[player].direction = NONE;
+        }
         break;
     case LEFT:
         if ((in_bounds(get_pacman_x(pacman, player) - 1, get_pacman_y(pacman, player)) == TRUE) && !is_wall(get_pacman_x(pacman, player) - 1, get_pacman_y(pacman, player)))
             pacman[player].direction = LEFT;
         else
+        {
+            pacman[player].last_direction = pacman[player].direction;
             pacman[player].direction = NONE;
+        }
         break;
     case RIGHT:
         if ((in_bounds(get_pacman_x(pacman, player) + 1, get_pacman_y(pacman, player)) == TRUE) && !is_wall(get_pacman_x(pacman, player) + 1, get_pacman_y(pacman, player)))
             pacman[player].direction = RIGHT;
         else
+        {
+            pacman[player].last_direction = pacman[player].direction;
             pacman[player].direction = NONE;
+        }
         break;
     }
 }
@@ -169,6 +181,7 @@ void ini_pacman(Model *model, int player_count, int player)
     model->pacman[player].x = (15 + ALIGN_ITEM_X) * 16;
     model->pacman[player].y = (13 + ALIGN_ITEM_Y) * 16;
     model->pacman[player].direction = NONE;
+    model->pacman[player].last_direction = LEFT;
     model->pacman[player].is_dead = FALSE;
     model->pacman[player].lives = 3;
     model->pacman[player].score = 0;
@@ -178,6 +191,7 @@ void ini_pacman(Model *model, int player_count, int player)
         model->pacman[1].x = (15 + ALIGN_ITEM_X) * 16;
         model->pacman[1].y = (13 + ALIGN_ITEM_Y) * 16;
         model->pacman[1].direction = NONE;
+        model->pacman[1].last_direction = LEFT;
         model->pacman[1].is_dead = FALSE;
         model->pacman[1].lives = 3;
         model->pacman[1].score = 0;
