@@ -1,7 +1,7 @@
 #include "TYPES.H"
 #include "MODEL.H"
 #include "SPRITES.H"
-/* #include "MAZE_ARRAY.H" */
+#include "RASTER.H"
 
 void on_pacman_move(Model *model, UINT32 key, int player);
 

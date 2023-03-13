@@ -7,7 +7,7 @@ void render(Model *model, char *base, int player_count, int player)
     render_glow_balls(model, (UINT16 *)base, player);
 
     render_pacman(model, (UINT16 *)base, player);
-    render_ghosts(model, (UINT16 *)base);
+    render_ghosts(model, (UINT16 *)base, player);
 
     render_snacks(model, (UINT16 *)base, player);
     render_scorebox(model, (UINT8 *)base, player_count);
@@ -23,193 +23,339 @@ void render(Model *model, char *base, int player_count, int player)
 void render_pacman(Model *model, UINT16 *base, int player)
 {
     int i;
+    int custom;
+    int pacman_x = get_pacman_x(&model->pacman[player]);
+    int pacman_y = get_pacman_y(&model->pacman[player]);
+
+    /* new function that renders to nothing. WHen ghost eat pacman and pacmna not in SUPER mode */
+    /* shifts pacman into black */
+
 
     /* render according ot direction */
-    if (model->pacman[player].is_dead == FALSE)
+    switch (model->pacman[player].direction)
     {
-        switch (model->pacman[player].direction)
+    case UP:
+        if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall(pacman_x, pacman_y - 1))
         {
-        case UP:
-            if ((in_bounds(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) - 1) == TRUE) && !is_wall(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) - 1))
+
+            for (i = 0; i < 2; i++)
             {
-                for (i = 0; i < 2; i++)
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+            }
+            model->pacman[player].y -= 2;
+
+            /* second frame */
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
                 }
-                model->pacman[player].y -= 2;
+            }
+            model->pacman[player].y -= 4;
 
-                for (i = 0; i < 4; i++)
+            /* third frame */
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up_open, CHARACTER_SIZE);
                 }
-                model->pacman[player].y -= 4;
-
-                for (i = 0; i < 4; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
-                }
-                model->pacman[player].y -= 4;
-
-                for (i = 0; i < 4; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_closed, CHARACTER_SIZE);
-                }
-                model->pacman[player].y -= 4;
-
-                for (i = 0; i < 2; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
-                }
-                model->pacman[player].y -= 2;
             }
-            break;
+            model->pacman[player].y -= 4;
 
-        case DOWN:
-            if ((in_bounds(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) + 1) == TRUE) && !is_wall(get_pacman_x(model->pacman, player), get_pacman_y(model->pacman, player) + 1))
+            /* forth frame */
+            for (i = 0; i < 4; i++)
             {
-                
-                for (i = 0; i < 2; i++)
+                for (custom = 0; custom < 16; custom++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                }
+            }
+            model->pacman[player].y -= 4;
+
+            for (i = 0; i < 2; i++)
+            {
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+            }
+            model->pacman[player].y -= 2;
+        }
+        break;
+
+    case DOWN:
+        if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall(pacman_x, pacman_y + 1))
+        {
+
+            for (i = 0; i < 2; i++)
+            {
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+            }
+            model->pacman[player].y += 2;
+
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
                 }
-                model->pacman[player].y += 2;
+            }
+            model->pacman[player].y += 4;
 
-                for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down_open, CHARACTER_SIZE);
                 }
-                model->pacman[player].y += 4;
-
-                for (i = 0; i < 4; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
-                }
-                model->pacman[player].y += 4;
-
-                for (i = 0; i < 4; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_closed, CHARACTER_SIZE);
-                }
-                model->pacman[player].y += 4;
-
-                for (i = 0; i < 2; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
-                }
-                model->pacman[player].y += 2;
             }
-            break;
+            model->pacman[player].y += 4;
 
-        case LEFT:
-            if ((in_bounds(get_pacman_x(model->pacman, player) - 1, get_pacman_y(model->pacman, player)) == TRUE) && !is_wall(get_pacman_x(model->pacman, player) - 1, get_pacman_y(model->pacman, player)))
+            for (i = 0; i < 4; i++)
             {
-                for (i = 0; i < 2; i++)
+                for (custom = 0; custom < 16; custom++)
                 {
-                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
                 }
-                model->pacman[player].x -= 2;
+            }
+            model->pacman[player].y += 4;
 
-                for (i = 0; i < 4; i++)
+            for (i = 0; i < 2; i++)
+            {
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+            }
+            model->pacman[player].y += 2;
+        }
+        break;
+
+    case LEFT:
+        if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall(pacman_x - 1, pacman_y))
+        {
+
+            /* first frame */
+            for (i = 0; i < 2; i++)
+            {
+                plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+            }
+            model->pacman[player].x -= 2;
+
+            /* second frame */
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left_open, CHARACTER_SIZE);
                 }
-                model->pacman[player].x -= 4;
+            }
+            model->pacman[player].x -= 4;
 
-                for (i = 0; i < 4; i++)
+            /* third frame */
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
                 }
-                model->pacman[player].x -= 4;
+            }
+            model->pacman[player].x -= 4;
 
-                for (i = 0; i < 4; i++)
+            /* forth frame */
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
                 }
-                model->pacman[player].x -= 4;
-
-                for (i = 0; i < 2; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
-                }
-                model->pacman[player].x -= 2;
             }
-            break;
+            model->pacman[player].x -= 4;
 
-        case RIGHT:
-            if ((in_bounds(get_pacman_x(model->pacman, player) + 1, get_pacman_y(model->pacman, player)) == TRUE) && !is_wall(get_pacman_x(model->pacman, player) + 1, get_pacman_y(model->pacman, player)))
+            /* fifth frame */
+            for (i = 0; i < 2; i++)
             {
-                for (i = 0; i < 2; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
-                }
-                model->pacman[player].x += 2;
+                plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+            }
+            model->pacman[player].x -= 2;
+        }
+        break;
 
-                for (i = 0; i < 4; i++)
+    case RIGHT:
+        if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall(pacman_x + 1, pacman_y))
+        {
+
+            for (i = 0; i < 2; i++)
+            {
+                plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+            }
+            model->pacman[player].x += 2;
+
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right_open, CHARACTER_SIZE);
                 }
-                model->pacman[player].x += 4;
+            }
+            model->pacman[player].x += 4;
 
-                for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
                 }
-                model->pacman[player].x += 4;
+            }
+            model->pacman[player].x += 4;
 
-                for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++)
+            {
+                for (custom = 0; custom < 16; custom++)
                 {
                     plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
                 }
-                model->pacman[player].x += 4;
-
-                for (i = 0; i < 2; i++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
-                }
-                model->pacman[player].x += 2;
             }
+            model->pacman[player].x += 4;
+
+            for (i = 0; i < 2; i++)
+            {
+                plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+            }
+            model->pacman[player].x += 2;
+        }
+        break;
+
+    case NONE:
+        switch (model->pacman[player].last_direction)
+        {
+        case UP:
+            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_up, CHARACTER_SIZE);
             break;
 
-        case NONE:
-            switch (model->pacman[player].last_direction)
-            {
-            case UP:
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_up, CHARACTER_SIZE);
-                break;
+        case DOWN:
+            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_down, CHARACTER_SIZE);
+            break;
 
-            case DOWN:
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_down, CHARACTER_SIZE);
-                break;
+        case LEFT:
+            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+            break;
 
-            case LEFT:
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
-                break;
-
-            case RIGHT:
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
-                break;
-            }
+        case RIGHT:
+            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+            break;
         }
     }
 }
 
-void render_ghosts(Model *model, UINT16 *base)
+void render_ghosts(Model *model, UINT16 *base, int player)
 {
     int i;
+    int j;
+    int custom;
+
     /* render according to mode & direction */
 
     for (i = 0; i < 3; i++)
     {
-        if (model->ghosts[i].is_dead == FALSE)
+        if (model->ghosts[i].is_dead == FALSE && (pacman_collides_with_ghost(model, player) == FALSE || model->pacman[player].mode != SUPER))
         {
             if (model->ghosts[i].mode == SCATTER)
             {
-                plot_bitmap_16(base, model->ghosts[i].x + ALIGN_ITEM_X, (model->ghosts[i].y + ALIGN_ITEM_Y) * 16, ghost_scatter_sprite, CHARACTER_SIZE);
+                switch (model->ghosts[i].direction)
+                {
+                case UP:
+                    for (j = 0; j < 8; j++)
+                    {
+                        for (custom = 0; custom < 16; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y - j, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].y -= 8;
+                    break;
+
+                case DOWN:
+                    for (j = 0; j < 8; j++)
+                    {
+                        for (custom = 0; custom < 16; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y + j, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].y += 8;
+                    break;
+
+                case LEFT:
+                    for (j = 0; j < 8; j++)
+                    {
+                        for (custom = 0; custom < 16; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x - j, model->ghosts[i].y, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].x -= 8;
+                    break;
+
+                case RIGHT:
+                    for (j = 0; j < 8; j++)
+                    {
+                        for (custom = 0; custom < 16; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x + j, model->ghosts[i].y, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].x += 8;
+                    break;
+                }
             }
             else
             {
-                plot_bitmap_16(base, model->ghosts[i].x + ALIGN_ITEM_X, (model->ghosts[i].y + ALIGN_ITEM_Y) * 16, ghost_sprite, CHARACTER_SIZE);
+                switch (model->ghosts[i].direction)
+                {
+                case UP:
+                    for (j = 0; j < 16; j++)
+                    {
+                        for (custom = 0; custom < 2; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y - j, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].y -= 16;
+                    break;
+
+                case DOWN:
+                    for (j = 0; j < 16; j++)
+                    {
+                        for (custom = 0; custom < 2; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y + j, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].y += 16;
+                    break;
+
+                case LEFT:
+                    for (j = 0; j < 16; j++)
+                    {
+                        for (custom = 0; custom < 2; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x - j, model->ghosts[i].y, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].x -= 16;
+                    break;
+
+                case RIGHT:
+                    for (j = 0; j < 16; j++)
+                    {
+                        for (custom = 0; custom < 2; custom++)
+                        {
+                            plot_bitmap_16_2(base, model->ghosts[i].x + j, model->ghosts[i].y, ghost_sprite, CHARACTER_SIZE);
+                        }
+                    }
+                    model->ghosts[i].x += 16;
+                    break;
+                }
             }
+        } else {
+            plot_bitmap_16_2(base, get_ghost_x(&model->ghosts[i]), get_ghost_y(&model->ghosts[i]), emp, CHARACTER_SIZE);
         }
     }
 }
@@ -219,9 +365,6 @@ void render_snacks(Model *model, UINT16 *base, int player)
     int i;
     int j;
 
-    int snack_x;
-    int snack_y;
-
     for (i = 0; i < MAZE_ARRAY_HEIGHT; i++)
     {
         for (j = 0; j < MAZE_ARRAY_WIDTH; j++)
@@ -230,10 +373,12 @@ void render_snacks(Model *model, UINT16 *base, int player)
             {
                 if (model->snacks[MAZE_ARRAY_WIDTH * i + j].eaten == FALSE)
                 {
-                    if ((snack_x == get_pacman_x(model->pacman, 0) && (snack_y == get_pacman_y(model->pacman, 0))) == FALSE) {
+                    if (!(model->snacks[MAZE_ARRAY_WIDTH * i + j].x == get_pacman_x(&model->pacman[player]) && model->snacks[MAZE_ARRAY_WIDTH * i + j].y == get_pacman_y(&model->pacman[player])) &&
+                        !(model->snacks[MAZE_ARRAY_WIDTH * i + j].x == get_ghost_x(&model->ghosts[0]) && model->snacks[MAZE_ARRAY_WIDTH * i + j].y == get_ghost_y(&model->ghosts[0])) &&
+                        !(model->snacks[MAZE_ARRAY_WIDTH * i + j].x == get_ghost_x(&model->ghosts[1]) && model->snacks[MAZE_ARRAY_WIDTH * i + j].y == get_ghost_y(&model->ghosts[1])) &&
+                        !(model->snacks[MAZE_ARRAY_WIDTH * i + j].x == get_ghost_x(&model->ghosts[2]) && model->snacks[MAZE_ARRAY_WIDTH * i + j].y == get_ghost_y(&model->ghosts[2])))
+                    {
                         plot_bitmap_16(base, model->snacks[MAZE_ARRAY_WIDTH * i + j].x + ALIGN_ITEM_X, (model->snacks[MAZE_ARRAY_WIDTH * i + j].y + ALIGN_ITEM_Y) * 16, snack_sprite, CHARACTER_SIZE);
-                    } else {
-                        plot_bitmap_16(base, model->snacks[MAZE_ARRAY_WIDTH * i + j].x + ALIGN_ITEM_X, (model->snacks[MAZE_ARRAY_WIDTH * i + j].y + ALIGN_ITEM_Y) * 16, emp, CHARACTER_SIZE);
                     }
                 }
             }
@@ -262,11 +407,13 @@ void render_glow_balls(Model *model, UINT16 *base, int player)
     {
         if (model->glow_balls[i].eaten == FALSE)
         {
-            plot_bitmap_16(base, model->glow_balls[i].x + ALIGN_ITEM_X, (model->glow_balls[i].y + ALIGN_ITEM_Y) * 16, glow_ball_sprite, CHARACTER_SIZE);
-        }
-        else
-        {
-            plot_bitmap_16(base, model->glow_balls[i].x + ALIGN_ITEM_X, (model->glow_balls[i].y + ALIGN_ITEM_Y) * 16, emp, CHARACTER_SIZE);
+            if (!(model->glow_balls[i].x == get_pacman_x(&model->pacman[player]) && model->glow_balls[i].y == get_pacman_y(&model->pacman[player]) &&
+                  !(model->glow_balls[i].x == get_ghost_x(&model->ghosts[0]) && model->glow_balls[i].y == get_ghost_y(&model->ghosts[0])) &&
+                  !(model->glow_balls[i].x == get_ghost_x(&model->ghosts[1]) && model->glow_balls[i].y == get_ghost_y(&model->ghosts[1])) &&
+                  !(model->glow_balls[i].x == get_ghost_x(&model->ghosts[2]) && model->glow_balls[i].y == get_ghost_y(&model->ghosts[2]))))
+            {
+                plot_bitmap_16(base, model->glow_balls[i].x + ALIGN_ITEM_X, (model->glow_balls[i].y + ALIGN_ITEM_Y) * 16, glow_ball_sprite, CHARACTER_SIZE);
+            }
         }
     }
 }
@@ -287,13 +434,13 @@ void clear_livebox(UINT16 *base, int player_count)
     int i;
     for (i = 0; i < 3; i++)
     {
-        clear_region_16(base, 6 + i, 80);
+        clear_region_16(base, 6 + i, 53);
     }
     if (player_count == 2)
     {
         for (i = 0; i < 3; i++)
         {
-            clear_region_16(base, 31 + i, 80);
+            clear_region_16(base, 31 + i, 53);
         }
     }
 }
@@ -302,20 +449,18 @@ void render_livebox(Model *model, UINT16 *base, int player_count)
 {
 
     int i;
-    int j = 0;
+
+    clear_livebox(base, player_count);
 
     for (i = 0; i < model->pacman[0].lives; i++)
     {
-        plot_bitmap_16(base, model->livebox[0].x + j, model->livebox[0].y, pacman_left, CHARACTER_SIZE);
-        j += 1;
+        plot_bitmap_16(base, model->livebox[0].x + i, model->livebox[0].y, pacman_right, CHARACTER_SIZE);
     }
     if (player_count == 2)
     {
-        j = 0;
         for (i = 0; i < model->pacman[1].lives; i++)
         {
-            plot_bitmap_16(base, model->livebox[1].x + j, model->livebox[1].y, pacman_left, CHARACTER_SIZE);
-            j += 1;
+            plot_bitmap_16(base, model->livebox[1].x + i, model->livebox[1].y, pacman_right, CHARACTER_SIZE);
         }
     }
 }

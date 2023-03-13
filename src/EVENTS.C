@@ -5,16 +5,16 @@ void on_pacman_move(Model *model, UINT32 key, int player)
     switch (key)
     {
     case UP_KEY:
-        move_pacman(model->pacman, UP, player);
+        move_pacman(model, UP, player);
         break;
     case DOWN_KEY:
-        move_pacman(model->pacman, DOWN, player);
+        move_pacman(model, DOWN, player);
         break;
     case LEFT_KEY:
-        move_pacman(model->pacman, LEFT, player);
+        move_pacman(model, LEFT, player);
         break;
     case RIGHT_KEY:
-        move_pacman(model->pacman, RIGHT, player);
+        move_pacman(model, RIGHT, player);
         break;
     }
 }
@@ -33,8 +33,8 @@ void on_ghost_move(Model *model, int player)
 
 void on_snack_eat(Model *model, int player)
 {
-    int pacman_x = get_pacman_x(model->pacman, player);
-    int pacman_y = get_pacman_y(model->pacman, player);
+    int pacman_x = get_pacman_x(&model->pacman[player]);
+    int pacman_y = get_pacman_y(&model->pacman[player]);
 
     model->pacman[player].score += 50;
     model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten = TRUE;
@@ -44,6 +44,7 @@ void on_snack_eat(Model *model, int player)
 void on_cherry_eat(Model *model, int player)
 {
     model->pacman[player].score += 100;
+    /* eat = TRUE */
     update_scorebox(model, player);
 }
 
@@ -54,21 +55,24 @@ void on_glow_ball_eat(Model *model, int player)
     model->pacman[player].score += 200;
     model->pacman[player].mode = SUPER;
     update_scorebox(model, player);
+    /*
     for (j = 0; j < 3; j++)
     {
         model->ghosts[j].mode = SCATTER;
     }
+    */
 }
 
 void on_ghost_eat(Model *model, int player)
 {
-    int pacman_x = model->pacman[player].x;
-    int pacman_y = model->pacman[player].y;
+    int pacman_x = get_pacman_x(&model->pacman[player]);
+    int pacman_y = get_pacman_y(&model->pacman[player]);
     int i = 0;
 
     for (i = 0; i < 3; i++)
     {
-        if (model->ghosts[i].x == pacman_x && model->ghosts[i].y == pacman_y)
+        /* this if ** but with ghost x and y */
+        if (pacman_collides_with_ghost(model, player) == TRUE)
         {
             if (model->pacman[player].mode == SUPER)
             {
@@ -77,24 +81,21 @@ void on_ghost_eat(Model *model, int player)
                 update_scorebox(model, player);
 
                 /* initialize single ghost function */
-                model->ghosts[i].x = 19;
-                model->ghosts[i].y = 6;
-                model->ghosts[i].mode = ROAM;
+                reset_ghost(&model->ghosts[i]);
+                return;
             }
             else
             {
                 /* initialize pacman & reduce lives */
-                model->pacman[player].lives--;
+                model->pacman[player].lives -= 1;
 
                 if (model->pacman[player].lives == 0)
                 {
                     on_game_over(model);
                 }
 
-                model->pacman[player].x = 15;
-                model->pacman[player].y = 13;
-                model->pacman[player].mode = NORMAL;
-                update_livebox(model, player);
+                reset_pacman(model, player);
+                return;
             }
         }
     }

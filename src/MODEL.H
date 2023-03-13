@@ -3,12 +3,11 @@
 
 #include "TYPES.H"
 #include "SPRITES.H"
-/* #include "MAZE_ARRAY.H" */
 #include "RASTER.H"
 
 typedef struct {
-    unsigned int x, y;
-    int delta_x, delta_y;   /* displcement per clock tick / speed */
+    int x, y;
+    int prev_x, prev_y;   /* displcement per clock tick / speed */
     direction direction, last_direction;
     int lives;
     int score;
@@ -106,10 +105,13 @@ typedef struct {
     return:
         void
 */
-void move_pacman(pacman pacman[], direction direction, int player);
+void move_pacman(Model *model, direction direction, int player);
 
-int get_pacman_x(pacman pacman[], int player);
-int get_pacman_y(pacman pacman[], int player);
+int get_pacman_x(pacman *pacman);
+int get_pacman_y(pacman *pacman);
+
+int get_ghost_x(ghost *ghost);
+int get_ghost_y(ghost *ghost);
 
 /* Initialize objects on screen */
 
@@ -205,8 +207,6 @@ void update_scorebox(Model *model, int player);
 */
 void ini_livebox(Model *model, int player_count);
 
-void update_livebox(Model *model, int player);
-
 /*
     paramters:
         pacman: pointer to pacman struct
@@ -246,6 +246,7 @@ int pacman_collides_with_glow_ball(Model *model, int player);
 int pacman_collides_with_ghost(Model *model, int player);
 int pacman_collides_with_ghost_house(pacman pacman[], direction direction, int player);
 int pacman_collides_with_wall(pacman pacman[], direction direction, int player);     /* wall object or background? */
+void reset_pacman(Model *model, int player);
 
 /* ghost collisions */
 int ghost_collides_with_snack(ghost *ghost, snack *snacks);
@@ -264,6 +265,8 @@ void destroy_glow_ball(glow_ball *glow_ball);
 void ini_game_session(Model *model, int player_count, int player);
 void close_game_session(Model *model);
 void won_game_session(Model *model);
+
+int check_ghost(Model *model, int x, int y);
 
 
 /* ghost AI */

@@ -12,26 +12,13 @@
 #define TRUE 1
 #define FALSE 0
 
+#define ESC_KEY 0x0001001b
 #define LEFT_KEY 0x004b0000
 #define RIGHT_KEY 0x004d0000
 #define SPACE_KEY 0x00390020
 #define UP_KEY 0x00480000
 #define DOWN_KEY 0x00500000
 #define ENTER_KEY 0x001C000D
-
-/*
-right
-left
-up
-down
-space*/
-/*
-#define RIGHT_KEY 0x00000061
-#define LEFT_KEY 0x00000064
-#define UP_KEY 0x00000077
-#define DOWN_KEY 0x00000073
-#define space_KEY 0x00000020 /
-*/
 
 #define SCREEN_HEIGHT 640
 #define SCREEN_WIDTH 400

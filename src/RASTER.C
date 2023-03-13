@@ -391,6 +391,13 @@ void plot_screen(UINT32 *base, UINT32 *bitmap)
 void clear_region_16(UINT16 *base, int x, int y)
 {
 	int i;
-	for (i = 0; i < 16; i++)
-		*(base + y + x + i) = 0;
+
+	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
+	{
+		for (i = 0; i < 16; i++)
+		{
+			*(base + y * 40 + x) = 0xFFFF;
+			y++;
+		}
+	}
 }

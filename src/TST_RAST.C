@@ -20,14 +20,29 @@
 #include "RENDERER.H"
 
 void display_splash_screen(char *base);
+void process_sync_events(Model *model, char *base, int player_count, int player);
 void process_async_events(Model *model, int player_count);
 
 int main()
 {
 	char *base = Physbase();
 	Model model;
-	int player_count = 1;
+	int player_count = 2;
 	int i;
+
+	int select = 1;
+	UINT32 key = 0x00000000;
+	UINT32 prev_key = 0x00000000;
+
+	UINT32 timeThen, timeNow, timePassed;
+
+	UINT32 *timer = (UINT32 *)0x462;
+	UINT32 timeNow;
+	UINT32 old_ssp = Super(0);
+	timeNow = *timer;
+	Super(old_ssp);
+
+	timePassed = timeNow - timeThen;
 
 	/* display_splash_screen(base); */
 
@@ -60,28 +75,71 @@ int main()
 	plot_bitmap_16_2((UINT16 *)base, 1, 0, (UINT16 *)pacman_left, 16);
 	*/
 
-	plot_screen((UINT32 *)base, (UINT32 *)map_display);
+	/*
+			plot_screen((UINT32 *)base, (UINT32 *)map_display);
 	ini_game_session(&model, player_count, 0);
 	render_pacman(&model, (UINT16 *)base, 0);
 	render_scorebox(&model, (UINT8 *)base, 0);
 	render_snacks(&model, (UINT16 *)base, 0);
+	render_ghosts(&model, (UINT16 *)base, 0);
+	render_glow_balls(&model, (UINT16 *)base, 0);
+	render_livebox(&model, (UINT16 *)base, 0);
 
-	while (1)
+	model.pacman[0].mode = SUPER;
+	*/
+
+	display_splash_screen(base);
+
+	while (key != ENTER_KEY)
 	{
-		UINT32 key = Cconis();
+
+		if (select)
+		{
+			print_string_8((UINT8 *)base, 272, 220, "=");
+			print_string_8((UINT8 *)base, 272, 250, " ");
+		}
+		else
+		{
+			print_string_8((UINT8 *)base, 272, 220, " ");
+			print_string_8((UINT8 *)base, 272, 250, "=");
+		}
+
+		key = Cconis();
 		key = Cnecin();
 
-		on_pacman_move(&model, key, 0);
-		render_pacman(&model, (UINT16 *)base, 0);
-
-		if (pacman_collides_with_snack(&model, 0))
+		if (key == DOWN_KEY || key == UP_KEY)
 		{
-			on_snack_eat(&model, 0);
+			select = !select;
 		}
-		render_scorebox(&model, (UINT8 *)base, 0);
-		render_snacks(&model, (UINT16 *)base, 0);
 
-		key = 0x00000000;
+		if (key == ENTER_KEY)
+		{
+			if (select)
+			{
+				player_count = 1;
+			}
+			else
+			{
+				player_count = 2;
+			}
+		}
+
+		if (key == ESC_KEY)
+		{
+			return 0;
+		}
+	}
+
+	ini_game_session(&model, player_count, 0);
+	render(&model, base, player_count, 0);
+
+	/* GAME */
+	while (key != ESC_KEY && timePassed > 0)
+	{
+		process_async_events(&model, player_count);
+		process_sync_events(&model, base, player_count, 0);
+
+		timeThen = timeNow;
 	}
 
 	/*
@@ -139,10 +197,45 @@ void display_splash_screen(char *base)
 
 	print_string_8((UINT8 *)base, 288, 220, "1 PLAYER");
 	print_string_8((UINT8 *)base, 288, 250, "2 PLAYERS");
-	print_string_8((UINT8 *)base, 212, 325, "MADE BY CLENCY & GLENN - 2023");
+	print_string_8((UINT8 *)base, 280, 280, "ESC QUIT");
+	print_string_8((UINT8 *)base, 212, 360, "MADE BY CLENCY & GLENN - 2023");
 }
 
 void process_async_events(Model *model, int player_count)
 {
-	UINT32 input;
+	UINT32 key = 0x00000000;
+	UINT32 prev_key = 0x00000000;
+
+	key = Cconis();
+	key = Cnecin();
+
+	if (key != prev_key)
+	{
+		on_pacman_move(model, key, 0); /* asyn */
+	}
+	
+	prev_key = key;
+}
+
+void process_sync_events(Model *model, char *base, int player_count, int player)
+{
+	on_ghost_move(model, 0);
+
+	render_ghosts(model, (UINT16 *)base, 0);
+	render_pacman(model, (UINT16 *)base, 0);
+
+	if (pacman_collides_with_snack(model, 0))
+	{
+		on_snack_eat(model, 0);
+	}
+
+	if (pacman_collides_with_glow_ball(model, 0))
+	{
+		on_glow_ball_eat(model, 0);
+	}
+
+	render_livebox(model, (UINT16 *)base, 1);
+	render_scorebox(model, (UINT8 *)base, 0);
+	render_snacks(model, (UINT16 *)base, 0);
+	render_glow_balls(model, (UINT16 *)base, 0);
 }
