@@ -232,9 +232,9 @@ void process_async_events(Model *model, int player_count)
 void process_sync_events(Model *model, char *base, int player_count, int player)
 {
 	on_ghost_move(model, 0);
-	render_pacman(model, (UINT16 *)base, 0);
-
 	render_ghosts(model, (UINT16 *)base, 0);
+
+	render_pacman(model, (UINT16 *)base, 0);
 
 	if (pacman_collides_with_snack(model, 0))
 	{
