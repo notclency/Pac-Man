@@ -30,217 +30,221 @@ void render_pacman(Model *model, UINT16 *base, int player)
     /* new function that renders to nothing. WHen ghost eat pacman and pacmna not in SUPER mode */
     /* shifts pacman into black */
 
-
     /* render according ot direction */
-    switch (model->pacman[player].direction)
+    if (model->pacman[player].is_dead == FALSE)
     {
-    case UP:
-        if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall(pacman_x, pacman_y - 1))
-        {
-
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
-            }
-            model->pacman[player].y -= 2;
-
-            /* second frame */
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].y -= 4;
-
-            /* third frame */
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up_open, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].y -= 4;
-
-            /* forth frame */
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].y -= 4;
-
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
-            }
-            model->pacman[player].y -= 2;
-        }
-        break;
-
-    case DOWN:
-        if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall(pacman_x, pacman_y + 1))
-        {
-
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
-            }
-            model->pacman[player].y += 2;
-
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].y += 4;
-
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down_open, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].y += 4;
-
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].y += 4;
-
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
-            }
-            model->pacman[player].y += 2;
-        }
-        break;
-
-    case LEFT:
-        if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall(pacman_x - 1, pacman_y))
-        {
-
-            /* first frame */
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
-            }
-            model->pacman[player].x -= 2;
-
-            /* second frame */
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left_open, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].x -= 4;
-
-            /* third frame */
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].x -= 4;
-
-            /* forth frame */
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].x -= 4;
-
-            /* fifth frame */
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
-            }
-            model->pacman[player].x -= 2;
-        }
-        break;
-
-    case RIGHT:
-        if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall(pacman_x + 1, pacman_y))
-        {
-
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
-            }
-            model->pacman[player].x += 2;
-
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right_open, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].x += 4;
-
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].x += 4;
-
-            for (i = 0; i < 4; i++)
-            {
-                for (custom = 0; custom < 16; custom++)
-                {
-                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
-                }
-            }
-            model->pacman[player].x += 4;
-
-            for (i = 0; i < 2; i++)
-            {
-                plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
-            }
-            model->pacman[player].x += 2;
-        }
-        break;
-
-    case NONE:
-        switch (model->pacman[player].last_direction)
+        switch (model->pacman[player].direction)
         {
         case UP:
-            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_up, CHARACTER_SIZE);
+            if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall(pacman_x, pacman_y - 1))
+            {
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 2;
+
+                /* second frame */
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].y -= 4;
+
+                /* third frame */
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up_open, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].y -= 4;
+
+                /* forth frame */
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].y -= 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y - i, pacman_up, CHARACTER_SIZE);
+                }
+                model->pacman[player].y -= 2;
+            }
             break;
 
         case DOWN:
-            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_down, CHARACTER_SIZE);
+            if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall(pacman_x, pacman_y + 1))
+            {
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 2;
+
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].y += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down_open, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].y += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].y += 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y + i, pacman_down, CHARACTER_SIZE);
+                }
+                model->pacman[player].y += 2;
+            }
             break;
 
         case LEFT:
-            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+            if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall(pacman_x - 1, pacman_y))
+            {
+
+                /* first frame */
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 2;
+
+                /* second frame */
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left_open, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].x -= 4;
+
+                /* third frame */
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].x -= 4;
+
+                /* forth frame */
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].x -= 4;
+
+                /* fifth frame */
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x - i, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                }
+                model->pacman[player].x -= 2;
+            }
             break;
 
         case RIGHT:
-            plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+            if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall(pacman_x + 1, pacman_y))
+            {
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                }
+                model->pacman[player].x += 2;
+
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right_open, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].x += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].x += 4;
+
+                for (i = 0; i < 4; i++)
+                {
+                    for (custom = 0; custom < 16; custom++)
+                    {
+                        plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_closed, CHARACTER_SIZE);
+                    }
+                }
+                model->pacman[player].x += 4;
+
+                for (i = 0; i < 2; i++)
+                {
+                    plot_bitmap_16_2(base, model->pacman[player].x + i, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                }
+                model->pacman[player].x += 2;
+            }
             break;
+
+        case NONE:
+            switch (model->pacman[player].last_direction)
+            {
+            case UP:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_up, CHARACTER_SIZE);
+                break;
+
+            case DOWN:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_down, CHARACTER_SIZE);
+                break;
+
+            case LEFT:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_left, CHARACTER_SIZE);
+                break;
+
+            case RIGHT:
+                plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_right, CHARACTER_SIZE);
+                break;
+            }
         }
+    } else {
+        plot_bitmap_16(base, get_pacman_x(&model->pacman[player]), get_pacman_y(&model->pacman[player]), emp, CHARACTER_SIZE);
     }
 }
 
@@ -254,7 +258,7 @@ void render_ghosts(Model *model, UINT16 *base, int player)
 
     for (i = 0; i < 3; i++)
     {
-        if (model->ghosts[i].is_dead == FALSE && (pacman_collides_with_ghost(model, player) == FALSE || model->pacman[player].mode != SUPER))
+        if (model->ghosts[i].is_dead == FALSE)
         {
             if (model->ghosts[i].mode == SCATTER)
             {
@@ -354,7 +358,9 @@ void render_ghosts(Model *model, UINT16 *base, int player)
                     break;
                 }
             }
-        } else {
+        }
+        else
+        {
             plot_bitmap_16_2(base, get_ghost_x(&model->ghosts[i]), get_ghost_y(&model->ghosts[i]), emp, CHARACTER_SIZE);
         }
     }

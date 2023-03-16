@@ -51,7 +51,9 @@
     "EVENTS.C": "cpp",
     "MAZEARRAY.C": "cpp",
     "algorithm": "cpp",
-    "PSG.C": "cpp"
+    "PSG.C": "cpp",
+    "INPUT.C": "cpp",
+    "IKBD.C": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled",
   "C_Cpp_Runner.useAddressSanitizer": false

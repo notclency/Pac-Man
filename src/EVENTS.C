@@ -27,7 +27,10 @@ void on_ghost_move(Model *model, int player)
     int i = 0;
     for (i = 0; i < 3; i++)
     {
-        move_ghost(&model->ghosts[i], &model->pacman[player]);
+        if (model->ghosts[i].is_dead == FALSE)
+        {
+            move_ghost(&model->ghosts[i], &model->pacman[player]);
+        }
     }
 }
 
@@ -63,41 +66,34 @@ void on_glow_ball_eat(Model *model, int player)
     */
 }
 
-void on_ghost_eat(Model *model, int player)
+void on_ghost_eat(Model *model, int ghost_i, int player)
 {
     int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
     int i = 0;
 
-    for (i = 0; i < 3; i++)
+    if (model->pacman[player].mode == SUPER)
     {
-        /* this if ** but with ghost x and y */
-        if (pacman_collides_with_ghost(model, player) == TRUE)
+        model->pacman[player].score += 200;
+        model->ghosts[ghost_i].is_dead = TRUE;
+        update_scorebox(model, player);
+
+        /* initialize single ghost function */
+        reset_ghost(&model->ghosts[i]);
+        return;
+    }
+    else
+    {
+        /* initialize pacman & reduce lives */
+        model->pacman[player].lives -= 1;
+
+        if (model->pacman[player].lives == 0)
         {
-            if (model->pacman[player].mode == SUPER)
-            {
-                model->pacman[player].score += 200;
-                model->ghosts[i].is_dead = TRUE;
-                update_scorebox(model, player);
-
-                /* initialize single ghost function */
-                reset_ghost(&model->ghosts[i]);
-                return;
-            }
-            else
-            {
-                /* initialize pacman & reduce lives */
-                model->pacman[player].lives -= 1;
-
-                if (model->pacman[player].lives == 0)
-                {
-                    on_game_over(model);
-                }
-
-                reset_pacman(model, player);
-                return;
-            }
+            on_game_over(model);
         }
+
+        reset_pacman(model, player);
+        return;
     }
 }
 

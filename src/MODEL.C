@@ -40,10 +40,7 @@ void move_pacman(Model *model, direction direction, int player)
         break;
     }
 
-    if (pacman_collides_with_ghost(model, player))
-    {
-        on_ghost_eat(model, player);
-    }
+    pacman_collides_with_ghost(model, player);
 }
 
 int check_ghost(Model *model, int x, int y)
@@ -373,33 +370,38 @@ int pacman_collides_with_glow_ball(Model *model, int player)
     return 0;
 }
 
-int pacman_collides_with_ghost(Model *model, int player)
+void pacman_collides_with_ghost(Model *model, int player)
 {
+    /* check pacman direction and check if space on that direction is occupied by a ghost */
     int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
     int i;
+    int ghost_i = -1;
 
-    for (i = 0; i < 3; i++)
-    {
-        if (((pacman_x == get_ghost_x(&model->ghosts[i])) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE)) ||
-            pacman_x + 1 == get_ghost_x(&model->ghosts[i]) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == RIGHT && model->ghosts[i].direction == LEFT ||
-            pacman_x - 1 == get_ghost_x(&model->ghosts[i]) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == LEFT && model->ghosts[i].direction == RIGHT ||
-            pacman_x == get_ghost_x(&model->ghosts[i]) && (pacman_y + 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == DOWN && model->ghosts[i].direction == UP ||
-            pacman_x == get_ghost_x(&model->ghosts[i]) && (pacman_y - 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == UP && model->ghosts[i].direction == DOWN)
-        {
-            return 1;
+    for (i = 0; i < 3; i++) {
+        switch (model->pacman[player].direction) {
+            case UP:
+                if ((pacman_x == get_ghost_x(&model->ghosts[i])) && (pacman_y - 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
+                    ghost_i = i;
+                break;
+            case DOWN:
+                if ((pacman_x == get_ghost_x(&model->ghosts[i])) && (pacman_y + 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
+                    ghost_i = i;
+                break;
+            case LEFT:
+                if ((pacman_x - 1 == get_ghost_x(&model->ghosts[i])) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
+                    ghost_i = i;
+                break;
+            case RIGHT:
+                if ((pacman_x + 1 == get_ghost_x(&model->ghosts[i])) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
+                    ghost_i = i;
+                break;
         }
-
-        /*
-         ||
-            pacman_x + 1 == get_ghost_x(&model->ghosts[i]) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == RIGHT && model->ghosts[i].direction == LEFT ||
-            pacman_x - 1 == get_ghost_x(&model->ghosts[i]) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == LEFT && model->ghosts[i].direction == RIGHT ||
-            pacman_x == get_ghost_x(&model->ghosts[i]) && (pacman_y + 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == DOWN && model->ghosts[i].direction == UP ||
-            pacman_x == get_ghost_x(&model->ghosts[i]) && (pacman_y - 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE) && model->pacman[player].direction == UP && model->ghosts[i].direction == DOWN
-        */
     }
 
-    return 0;
+    if (ghost_i != -1) {
+        on_ghost_eat(model, ghost_i, player);
+    }
 }
 
 int pacman_collides_with_ghost_house(pacman pacman[], direction direction, int player)

@@ -1,5 +1,5 @@
-tst_rast: font.o tst_rast.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o
-	cc68x -g tst_rast.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o -o tst_rast
+tst_rast: font.o tst_rast.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o input.o
+	cc68x -g tst_rast.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o input.o -o tst_rast
 
 events.o: events.c raster.h
 	cc68x -g -c events.c
@@ -21,6 +21,9 @@ model.o: model.c raster.h
 
 map.o: map.c raster.h
 	cc68x -g -c map.c
+
+input.o: input.c raster.h
+	cc68x -g -c input.c
 
 renderer.o: renderer.c raster.h
 	cc68x -g -c renderer.c

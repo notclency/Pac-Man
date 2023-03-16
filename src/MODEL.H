@@ -243,7 +243,7 @@ void reset_ghost_mode(ghost *ghost);
 int pacman_collides_with_snack(Model *model, int player);
 int pacman_collides_with_cherry(Model *model, int player);
 int pacman_collides_with_glow_ball(Model *model, int player);
-int pacman_collides_with_ghost(Model *model, int player);
+void pacman_collides_with_ghost(Model *model, int player);
 int pacman_collides_with_ghost_house(pacman pacman[], direction direction, int player);
 int pacman_collides_with_wall(pacman pacman[], direction direction, int player);     /* wall object or background? */
 void reset_pacman(Model *model, int player);
