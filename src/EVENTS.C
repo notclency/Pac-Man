@@ -23,12 +23,20 @@ void on_ghost_move(Model *model, int player)
 {
 
     /* chase option */
-
     int i = 0;
     for (i = 0; i < 3; i++)
     {
         if (model->ghosts[i].is_dead == FALSE)
         {
+            if (model->pacman[player].mode == NORMAL)
+            {
+                model->ghosts[i].mode = ROAM;
+            }
+            else if (model->pacman[player].mode == SUPER)
+            {
+                model->ghosts[i].mode = SCATTER;
+            }
+
             move_ghost(&model->ghosts[i], &model->pacman[player]);
         }
     }
@@ -58,12 +66,11 @@ void on_glow_ball_eat(Model *model, int player)
     model->pacman[player].score += 200;
     model->pacman[player].mode = SUPER;
     update_scorebox(model, player);
-    /*
+
     for (j = 0; j < 3; j++)
     {
         model->ghosts[j].mode = SCATTER;
     }
-    */
 }
 
 void on_ghost_eat(Model *model, int ghost_i, int player)
@@ -79,20 +86,15 @@ void on_ghost_eat(Model *model, int ghost_i, int player)
         update_scorebox(model, player);
 
         /* initialize single ghost function */
-        reset_ghost(&model->ghosts[i]);
+        reset_ghost(&model->ghosts[ghost_i]);
         return;
     }
     else
     {
-        /* initialize pacman & reduce lives */
-        model->pacman[player].lives -= 1;
-
-        if (model->pacman[player].lives == 0)
-        {
-            on_game_over(model);
-        }
-
-        reset_pacman(model, player);
+        /* reset pacman */
+        model->pacman[player].lives--;
+        model->pacman[player].is_dead = TRUE;
+        is_dead(model, player);
         return;
     }
 }

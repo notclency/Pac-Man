@@ -1,11 +1,11 @@
-tst_rast: font.o tst_rast.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o input.o
-	cc68x -g tst_rast.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o input.o -o tst_rast
+tst_rast: font.o pacman.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o input.o
+	cc68x -g pacman.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o input.o -o pacman
 
 events.o: events.c raster.h
 	cc68x -g -c events.c
 
-tst_rast.o: tst_rast.c raster.h 
-	cc68x -g -c tst_rast.c
+pacman.o: pacman.c raster.h 
+	cc68x -g -c pacman.c
 
 raster.o: raster.c raster.h
 	cc68x -g -c raster.c

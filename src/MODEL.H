@@ -236,17 +236,22 @@ void ini_ghosts(Model *model);
 
 int is_wall(int x, int y);
 
+int is_wall_pacman(int x, int y);
+
 void reset_pacman_mode(pacman pacman[], int player);
 void reset_ghost_mode(ghost *ghost);
 
 /* pacman collisions */
-int pacman_collides_with_snack(Model *model, int player);
+void pacman_collides_with_snack(Model *model, int player);
 int pacman_collides_with_cherry(Model *model, int player);
-int pacman_collides_with_glow_ball(Model *model, int player);
+void pacman_collides_with_glow_ball(Model *model, int player);
 void pacman_collides_with_ghost(Model *model, int player);
 int pacman_collides_with_ghost_house(pacman pacman[], direction direction, int player);
 int pacman_collides_with_wall(pacman pacman[], direction direction, int player);     /* wall object or background? */
 void reset_pacman(Model *model, int player);
+
+
+void is_dead(Model *model, int player);
 
 /* ghost collisions */
 int ghost_collides_with_snack(ghost *ghost, snack *snacks);
@@ -263,11 +268,10 @@ void destroy_glow_ball(glow_ball *glow_ball);
 
 /* Initializes/Close gmae session */
 void ini_game_session(Model *model, int player_count, int player);
+void reset_game_session(Model *model, int player);
+
 void close_game_session(Model *model);
 void won_game_session(Model *model);
-
-int check_ghost(Model *model, int x, int y);
-
 
 /* ghost AI */
 void ghost_roam(ghost *ghost);

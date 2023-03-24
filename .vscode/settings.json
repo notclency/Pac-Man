@@ -53,7 +53,10 @@
     "algorithm": "cpp",
     "PSG.C": "cpp",
     "INPUT.C": "cpp",
-    "IKBD.C": "cpp"
+    "IKBD.C": "cpp",
+    "PACMAN.C": "cpp",
+    "MAZE.C": "cpp",
+    "BUFFER.C": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled",
   "C_Cpp_Runner.useAddressSanitizer": false

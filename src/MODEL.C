@@ -15,46 +15,38 @@ void move_pacman(Model *model, direction direction, int player)
     switch (direction)
     {
     case UP:
-        if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall(pacman_x, pacman_y - 1))
+        if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y - 1))
         {
             model->pacman[player].direction = UP;
+        } else {
+            model->pacman[player].direction = NONE;
         }
         break;
     case DOWN:
-        if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall(pacman_x, pacman_y + 1))
+        if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y + 1))
         {
             model->pacman[player].direction = DOWN;
+        } else {
+            model->pacman[player].direction = NONE;
         }
         break;
     case LEFT:
-        if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall(pacman_x - 1, pacman_y))
+        if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x - 1, pacman_y))
         {
             model->pacman[player].direction = LEFT;
+        } else {
+            model->pacman[player].direction = NONE;
         }
         break;
     case RIGHT:
-        if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall(pacman_x + 1, pacman_y))
+        if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x + 1, pacman_y))
         {
             model->pacman[player].direction = RIGHT;
+        } else {
+            model->pacman[player].direction = NONE;
         }
         break;
     }
-
-    pacman_collides_with_ghost(model, player);
-}
-
-int check_ghost(Model *model, int x, int y)
-{
-    int i = 0;
-    for (i = 0; i < 3; i++)
-    {
-        if (x == get_ghost_x(&model->ghosts[i]) && y == get_ghost_y(&model->ghosts[i]))
-        {
-            return 1;
-        }
-    }
-
-    return 0;
 }
 
 int get_pacman_x(pacman *pacman)
@@ -205,6 +197,7 @@ void ini_pacman(Model *model, int player_count, int player)
     model->pacman[player].is_dead = FALSE;
     model->pacman[player].lives = 3;
     model->pacman[player].score = 0;
+    model->pacman[player].snacks_eaten = 0;
 
     if (player_count == 2)
     {
@@ -217,6 +210,7 @@ void ini_pacman(Model *model, int player_count, int player)
         model->pacman[1].is_dead = FALSE;
         model->pacman[1].lives = 3;
         model->pacman[1].score = 0;
+        model->pacman[player].snacks_eaten = 0;
     }
 }
 
@@ -317,7 +311,7 @@ void ghost_scatter(ghost *ghost, pacman *pacman)
         ghost->direction = UP;
 }
 
-int pacman_collides_with_snack(Model *model, int player)
+void pacman_collides_with_snack(Model *model, int player)
 {
     int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
@@ -327,11 +321,9 @@ int pacman_collides_with_snack(Model *model, int player)
 
     if ((pacman_x == snack_x) && (pacman_y == snack_y) && (model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten == FALSE))
     {
-        /* model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten = TRUE; */
-        return 1;
+        model->pacman[player].snacks_eaten++;
+        on_snack_eat(model, player);
     }
-
-    return 0;
 }
 
 int pacman_collides_with_cherry(Model *model, int player)
@@ -345,6 +337,7 @@ int pacman_collides_with_cherry(Model *model, int player)
         if ((pacman_x == model->cherries[i].x) && (pacman_y == model->cherries[i].y) && (model->cherries[i].eaten == FALSE))
         {
             model->cherries[i].eaten = TRUE;
+            on_cherry_eat(model, player);
             return 1;
         }
     }
@@ -352,7 +345,7 @@ int pacman_collides_with_cherry(Model *model, int player)
     return 0;
 }
 
-int pacman_collides_with_glow_ball(Model *model, int player)
+void pacman_collides_with_glow_ball(Model *model, int player)
 {
     int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
@@ -363,44 +356,59 @@ int pacman_collides_with_glow_ball(Model *model, int player)
         if ((pacman_x == model->glow_balls[i].x) && (pacman_y == model->glow_balls[i].y) && (model->glow_balls[i].eaten == FALSE))
         {
             model->glow_balls[i].eaten = TRUE;
-            return 1;
+            on_glow_ball_eat(model, player);
         }
     }
-
-    return 0;
 }
 
 void pacman_collides_with_ghost(Model *model, int player)
 {
-    /* check pacman direction and check if space on that direction is occupied by a ghost */
+    int i;
     int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
-    int i;
-    int ghost_i = -1;
 
-    for (i = 0; i < 3; i++) {
-        switch (model->pacman[player].direction) {
+    int ghost_x;
+    int ghost_y;
+
+    for (i = 0; i < 3; i++)
+    {
+        ghost_x = get_ghost_x(&model->ghosts[i]);
+        ghost_y = get_ghost_y(&model->ghosts[i]);
+
+        if ((pacman_x == ghost_x) && (pacman_y == ghost_y))
+        {
+            on_ghost_eat(model, i, player);
+        }
+        else
+        {
+            switch (model->pacman[player].direction)
+            {
             case UP:
-                if ((pacman_x == get_ghost_x(&model->ghosts[i])) && (pacman_y - 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
-                    ghost_i = i;
+                if ((pacman_x == ghost_x) && (pacman_y - 1 == ghost_y) && (model->ghosts[i].direction == DOWN))
+                {
+                    on_ghost_eat(model, i, player);
+                }
                 break;
             case DOWN:
-                if ((pacman_x == get_ghost_x(&model->ghosts[i])) && (pacman_y + 1 == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
-                    ghost_i = i;
+                if ((pacman_x == ghost_x) && (pacman_y + 1 == ghost_y) && (model->ghosts[i].direction == UP))
+                {
+                    on_ghost_eat(model, i, player);
+                }
                 break;
             case LEFT:
-                if ((pacman_x - 1 == get_ghost_x(&model->ghosts[i])) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
-                    ghost_i = i;
+                if ((pacman_y == ghost_y) && (pacman_x - 1 == ghost_x) && (model->ghosts[i].direction == RIGHT))
+                {
+                    on_ghost_eat(model, i, player);
+                }
                 break;
             case RIGHT:
-                if ((pacman_x + 1 == get_ghost_x(&model->ghosts[i])) && (pacman_y == get_ghost_y(&model->ghosts[i])) && (model->ghosts[i].is_dead == FALSE))
-                    ghost_i = i;
+                if ((pacman_y == ghost_y) && (pacman_x + 1 == ghost_x) && (model->ghosts[i].direction == LEFT))
+                {
+                    on_ghost_eat(model, i, player);
+                }
                 break;
+            }
         }
-    }
-
-    if (ghost_i != -1) {
-        on_ghost_eat(model, ghost_i, player);
     }
 }
 
@@ -502,6 +510,7 @@ void reset_ghost_mode(ghost *ghost)
 void ini_game_session(Model *model, int player_count, int player)
 {
     model->game_over = FALSE;
+    model->game_won = FALSE;
     ini_cherries(model->cherries);
     ini_glow_balls(model);
     ini_snacks(model);
@@ -509,6 +518,32 @@ void ini_game_session(Model *model, int player_count, int player)
     ini_pacman(model, player_count, player);
     ini_scorebox(model, player_count);
     ini_livebox(model, player_count);
+}
+
+void reset_game_session(Model *model, int player)
+{
+    ini_cherries(model->cherries);
+    ini_glow_balls(model);
+    ini_snacks(model);
+    ini_ghosts(model);
+    reset_pacman(model, player);
+}
+
+void is_dead(Model *model, int player)
+{
+    if (model->pacman[player].lives > 0)
+    {
+        reset_game_session(model, player);
+    }
+    else
+    {
+        close_game_session(model);
+    }
+}
+
+void reset_pacman_state(Model *model, int player)
+{
+    model->pacman[player].mode = NORMAL;
 }
 
 void close_game_session(Model *model)
@@ -524,4 +559,9 @@ void won_game_session(Model *model)
 int is_wall(int x, int y)
 {
     return (maze_array[y][x] == 1);
+}
+
+int is_wall_pacman(int x, int y)
+{
+    return (maze_array[y][x] == 1 || maze_array[y][x] == -1);
 }

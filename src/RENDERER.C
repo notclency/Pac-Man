@@ -2,7 +2,7 @@
 
 void render(Model *model, char *base, int player_count, int player)
 {
-    clear_screen((char *)base);
+    /*clear_screen((char *)base);*/
     plot_screen((UINT32 *)base, (UINT32 *)map_display);
     render_glow_balls(model, (UINT16 *)base, player);
 
@@ -36,7 +36,7 @@ void render_pacman(Model *model, UINT16 *base, int player)
         switch (model->pacman[player].direction)
         {
         case UP:
-            if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall(pacman_x, pacman_y - 1))
+            if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y - 1))
             {
 
                 for (i = 0; i < 2; i++)
@@ -84,7 +84,7 @@ void render_pacman(Model *model, UINT16 *base, int player)
             break;
 
         case DOWN:
-            if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall(pacman_x, pacman_y + 1))
+            if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y + 1))
             {
 
                 for (i = 0; i < 2; i++)
@@ -129,7 +129,7 @@ void render_pacman(Model *model, UINT16 *base, int player)
             break;
 
         case LEFT:
-            if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall(pacman_x - 1, pacman_y))
+            if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x - 1, pacman_y))
             {
 
                 /* first frame */
@@ -179,7 +179,7 @@ void render_pacman(Model *model, UINT16 *base, int player)
             break;
 
         case RIGHT:
-            if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall(pacman_x + 1, pacman_y))
+            if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x + 1, pacman_y))
             {
 
                 for (i = 0; i < 2; i++)
@@ -224,7 +224,7 @@ void render_pacman(Model *model, UINT16 *base, int player)
             break;
 
         case NONE:
-            switch (model->pacman[player].last_direction)
+            switch (model->pacman[player].direction)
             {
             case UP:
                 plot_bitmap_16_2(base, model->pacman[player].x, model->pacman[player].y, pacman_up, CHARACTER_SIZE);
@@ -269,7 +269,7 @@ void render_ghosts(Model *model, UINT16 *base, int player)
                     {
                         for (custom = 0; custom < 16; custom++)
                         {
-                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y - j, ghost_sprite, CHARACTER_SIZE);
+                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y - j, ghost_scatter_sprite, CHARACTER_SIZE);
                         }
                     }
                     model->ghosts[i].y -= 8;
@@ -280,7 +280,7 @@ void render_ghosts(Model *model, UINT16 *base, int player)
                     {
                         for (custom = 0; custom < 16; custom++)
                         {
-                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y + j, ghost_sprite, CHARACTER_SIZE);
+                            plot_bitmap_16_2(base, model->ghosts[i].x, model->ghosts[i].y + j, ghost_scatter_sprite, CHARACTER_SIZE);
                         }
                     }
                     model->ghosts[i].y += 8;
@@ -291,7 +291,7 @@ void render_ghosts(Model *model, UINT16 *base, int player)
                     {
                         for (custom = 0; custom < 16; custom++)
                         {
-                            plot_bitmap_16_2(base, model->ghosts[i].x - j, model->ghosts[i].y, ghost_sprite, CHARACTER_SIZE);
+                            plot_bitmap_16_2(base, model->ghosts[i].x - j, model->ghosts[i].y, ghost_scatter_sprite, CHARACTER_SIZE);
                         }
                     }
                     model->ghosts[i].x -= 8;
@@ -302,7 +302,7 @@ void render_ghosts(Model *model, UINT16 *base, int player)
                     {
                         for (custom = 0; custom < 16; custom++)
                         {
-                            plot_bitmap_16_2(base, model->ghosts[i].x + j, model->ghosts[i].y, ghost_sprite, CHARACTER_SIZE);
+                            plot_bitmap_16_2(base, model->ghosts[i].x + j, model->ghosts[i].y, ghost_scatter_sprite, CHARACTER_SIZE);
                         }
                     }
                     model->ghosts[i].x += 8;
