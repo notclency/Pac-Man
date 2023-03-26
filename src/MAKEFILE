@@ -1,4 +1,4 @@
-tst_rast: font.o pacman.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o input.o
+pacman: font.o pacman.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o input.o
 	cc68x -g pacman.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o input.o -o pacman
 
 events.o: events.c raster.h

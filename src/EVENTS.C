@@ -49,14 +49,11 @@ void on_snack_eat(Model *model, int player)
 
     model->pacman[player].score += 50;
     model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten = TRUE;
-    update_scorebox(model, player);
 }
 
 void on_cherry_eat(Model *model, int player)
 {
     model->pacman[player].score += 100;
-    /* eat = TRUE */
-    update_scorebox(model, player);
 }
 
 void on_glow_ball_eat(Model *model, int player)
@@ -65,7 +62,6 @@ void on_glow_ball_eat(Model *model, int player)
 
     model->pacman[player].score += 200;
     model->pacman[player].mode = SUPER;
-    update_scorebox(model, player);
 
     for (j = 0; j < 3; j++)
     {
@@ -83,7 +79,6 @@ void on_ghost_eat(Model *model, int ghost_i, int player)
     {
         model->pacman[player].score += 200;
         model->ghosts[ghost_i].is_dead = TRUE;
-        update_scorebox(model, player);
 
         /* initialize single ghost function */
         reset_ghost(&model->ghosts[ghost_i]);

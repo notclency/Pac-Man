@@ -9,6 +9,11 @@
 #define PLAYER_1 0
 #define PLAYER_2 1
 
+/* move speeds */
+#define PACMAN_MOVE_SPEED 16
+#define GHOST_MOVE_SPEED 16
+#define GHOST_SCARED_SPEED 2
+
 #define TRUE 1
 #define FALSE 0
 
@@ -34,10 +39,6 @@
 
 #define PACMAN_SPAWAN_X 28
 #define PACMAN_SPAWAN_Y 18
-#define PACMAN_MOVE_SPEED 1
-
-#define GHOST_MOVE_SPEED 1
-#define GHOST_SCARED_SPEED 5
 
 typedef unsigned char UINT8;
 typedef unsigned int UINT16;

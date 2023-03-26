@@ -255,7 +255,7 @@ typedef struct {
  int 	tcgetpgrp	(int fd) ;
  int	tcsetpgrp	(int fd, int  pgrp) ;
 # 7 "./types.h" 2
-# 42 "./types.h"
+# 43 "./types.h"
 typedef unsigned char UINT8;
 typedef unsigned int UINT16;
 typedef unsigned long UINT32;

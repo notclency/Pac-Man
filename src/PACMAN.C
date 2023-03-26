@@ -8,50 +8,6 @@
 
 */
 
-/* display_splash_screen(base); */
-
-/*
-clear_screen(base);
-plot_screen((UINT32 *)base, (UINT32 *)map_display);
-plot_bitmap_16((UINT16 *)base, 21, 288, (UINT16 *)pacman_left, 16);
-plot_bitmap_16((UINT16 *)base, 20, 288, (UINT16 *)snack_sprite, 16);
-plot_bitmap_16((UINT16 *)base, 25, 176, (UINT16 *)ghost_sprite, 16);
-print_string_8((UINT8 *)base, 100, 20, "SCORE");
-print_num((UINT8 *)base, 100, 40, 000000);
-print_string_8((UINT8 *)base, 500, 20, "SCORE");
-print_num((UINT8 *)base, 500, 40, 000000);
-
-plot_bitmap_16((UINT16 *)base, 6 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
-plot_bitmap_16((UINT16 *)base, 7 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
-
-plot_bitmap_16((UINT16 *)base, 31 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
-plot_bitmap_16((UINT16 *)base, 32 + (0 * 16), 55, pacman_left, CHARACTER_SIZE);
-
-plot_bitmap_16((UINT16 *)base, 34, 112, (UINT16 *)glow_ball_sprite, 16);
-plot_bitmap_16((UINT16 *)base, 7, 112, (UINT16 *)snack_sprite, 16);
-plot_bitmap_16((UINT16 *)base, 7, 128, (UINT16 *)snack_sprite, 16);
-plot_bitmap_16((UINT16 *)base, 8, 128, (UINT16 *)snack_sprite, 16);
-plot_bitmap_16((UINT16 *)base, 9, 128, (UINT16 *)snack_sprite, 16);
-*/
-
-/*
-clear_screen(base);
-plot_bitmap_16_2((UINT16 *)base, 1, 0, (UINT16 *)pacman_left, 16);
-*/
-
-/*
-		plot_screen((UINT32 *)base, (UINT32 *)map_display);
-ini_game_session(&model, player_count, 0);
-render_pacman(&model, (UINT16 *)base, 0);
-render_scorebox(&model, (UINT8 *)base, 0);
-render_snacks(&model, (UINT16 *)base, 0);
-render_ghosts(&model, (UINT16 *)base, 0);
-render_glow_balls(&model, (UINT16 *)base, 0);
-render_livebox(&model, (UINT16 *)base, 0);
-
-model.pacman[0].mode = SUPER;
-*/
-
 #include <osbind.h>
 #include <stdio.h>
 #include "RASTER.H"
@@ -167,18 +123,11 @@ int main()
 	while (player < player_count)
 	{
 
-		while (!model.game_over && timeNow > 0 && model.pacman[i].snacks_eaten < 197 && !GAMEOVER)
+		while (!model.game_over && timeNow > 1 && model.pacman[i].snacks_eaten < 197 && !GAMEOVER)
 		{
 			process_async_events(&model, player_count);
 			process_sync_events(&model, base_1, base_2, player_count, i, &flip);
 
-			if (model.pacman[i].mode == SUPER)
-			{
-				if (timeNow > timeThen + 350)
-				{
-					model.pacman[i].mode = NORMAL;
-				}
-			}
 			timeThen = timeNow;
 		}
 
@@ -235,19 +184,15 @@ void process_sync_events(Model *model, char *base_1, char *base_2, int player_co
 
 	/* ghost/pacman collision check & render */
 	pacman_collides_with_ghost(model, player);
-	/* render_pacman(model, (UINT16 *)base, player); */
-	/* render_ghosts(model, (UINT16 *)base, player);	*/
-	pacman_collides_with_ghost(model, player);
 
 	/* edible collison check */
 	pacman_collides_with_snack(model, player);
 	pacman_collides_with_glow_ball(model, player);
-	pacman_collides_with_cherry(model, player);
+	/* pacman_collides_with_cherry(model, player); */
 
 	if (*flip)
 	{
 		render(model, base_1, player_count, player);
-		render(model, base_2, player_count, player);
 
 		Setscreen(-1, base_1, -1);
 		Vsync();
@@ -255,13 +200,12 @@ void process_sync_events(Model *model, char *base_1, char *base_2, int player_co
 	else
 	{
 		render(model, base_2, player_count, player);
-		render(model, base_1, player_count, player);
 
 		Setscreen(-1, base_2, -1);
 		Vsync();
 	}
 
-	!(*flip);
+	(*flip) = !(*flip);
 
 	/*
 	render(model, base_1, player_count, player);
