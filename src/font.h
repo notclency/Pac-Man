@@ -4,7 +4,7 @@
 #include "types.h"
 
 extern const UINT8 font[];     /* 8x8 system font */
-extern const UINT32 splash_font[]; 
+extern const UINT32 splash_font[]; // 8x8 splash font
 
 
 #define FONT_HEIGHT 8
