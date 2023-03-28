@@ -123,7 +123,7 @@ int main()
 	while (player < player_count)
 	{
 
-		while (!model.game_over && timeNow > 1 && model.pacman[i].snacks_eaten < 197 && !GAMEOVER)
+		while (!model.game_over && !model.game_won && timeNow > 1 && model.pacman[i].snacks_eaten < 205 && !GAMEOVER)
 		{
 			process_async_events(&model, player_count);
 			process_sync_events(&model, base_1, base_2, player_count, i, &flip);
@@ -134,7 +134,19 @@ int main()
 		player++;
 	}
 
-	/* GAME */
+	if (!model.game_over)
+	{
+		render_game_over_screen((UINT32 *)base_1, player);
+		Setscreen(-1, base_1, -1);
+		Vsync();
+
+	} else {
+		render_win_screen((UINT32 *)base_1, player);
+		Setscreen(-1, base_1, -1);
+		Vsync();
+	}
+
+	return 0;
 }
 
 void display_splash_screen(char *base)
@@ -193,32 +205,15 @@ void process_sync_events(Model *model, char *base_1, char *base_2, int player_co
 	if (*flip)
 	{
 		render(model, base_1, player_count, player);
-
 		Setscreen(-1, base_1, -1);
 		Vsync();
 	}
 	else
 	{
 		render(model, base_2, player_count, player);
-
 		Setscreen(-1, base_2, -1);
 		Vsync();
 	}
 
 	(*flip) = !(*flip);
-
-	/*
-	render(model, base_1, player_count, player);
-
-	Setscreen(-1, base_1, -1);
-	Vsync();
-	*/
-
-	/* render */
-	/*
-	render_livebox(model, (UINT16 *)base, player_count);
-	render_scorebox(model, (UINT8 *)base, player_count);
-	render_snacks(model, (UINT16 *)base, player);
-	render_glow_balls(model, (UINT16 *)base, player);
-	*/
 }

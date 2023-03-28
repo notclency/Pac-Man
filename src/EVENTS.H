@@ -108,41 +108,13 @@ void on_game_win(Model *model, int player_count);
         player: player number
 
     description:
-        called when game session has a winner
+        called when game session is started
 
     return:
 */
 void on_game_start(Model *model, int player_count, int player);
-/*
-    parameters:
-        model: model struct
 
-    description:
-        called when game session is started
-
-    return:
-
-*/
 void on_game_reset(Model *model);
-/*
-    parameters:
-        model: model struct
-
-    description:
-        called when game session is reset
-
-    return: 
-
-*/
 
 void on_game_exit(Model *model);
-/*
-    parameters:
-        model: model struct
 
-    description:
-        called when game session is exited
-
-    return: 
-    
-*/

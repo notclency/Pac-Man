@@ -12,110 +12,28 @@
 /* #include "MAZE_ARRAY.H" */
 
 void render(Model *model, char *base, int player_count, int player);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player_count: number of players
-    player: player number
-*/
 
 void render_pacman(Model *model, UINT16 *base, int player);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player: player number
-*/
 
 void render_ghosts(Model *model, UINT16 *base, int player);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player: player number
-*/
 
 void render_snacks(Model *model, UINT16 *base, int player);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player: player number
-*/
-void render_cherries(Model *model, UINT16 *base, int player);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player: player number
-*/
-void render_glow_balls(Model *model, UINT16 *base, int player);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player: player number
-*/
-void render_scorebox(Model *model, UINT8 *base, int player_count);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player_count: number of players
-*/
-void clear_livebox(UINT16 *base, int player_count);
-/*
-parameters:
-    base: base address of screen
-    player_count: number of players
-*/
-void render_livebox(Model *model,UINT16 *base, int player_count);
-/*
-parameters:
-    model: model struct
-    base: base address of screen
-    player_count: number of players
-*/
-void render_splash_screen(UINT32 *base);
-/*
-parameters:
-    base: base address of screen
-*/
-void render_game_over_screen(UINT32 *base);
-/*
-parameters:
-    base: base address of screen
-*/
-void render_win_screen(UINT32 *base);
-/*
-parameters:
-    base: base address of screen
-*/
-/* void clear_snack(snack *snack, UINT16 *base); */
 
-void clear_cherry(cherry *cherry, UINT16 *base);
-/*
-parameters:
-    cherry: cherry struct
-    base: base address of screen
-*/
-void clear_glow_ball(glow_ball *glow_ball, UINT16 *base);
-/*
-parameters:
-    glow_ball: glow_ball struct
-    base: base address of screen
-*/
-void clear_ghost(ghost *ghost, UINT16 *base);
-/*
-parameters:
-    ghost: ghost struct
-    base: base address of screen
-*/
-void clear_pacman(pacman *pacman, UINT16 *base);
-/*
-parameters:
-    pacman: pacman struct
-    base: base address of screen
-*/
+void render_cherries(Model *model, UINT16 *base, int player);
+
+void render_glow_balls(Model *model, UINT16 *base, int player);
+
+void render_scorebox(Model *model, UINT8 *base, int player_count);
+
+void clear_livebox(UINT16 *base, int player_count);
+
+void render_livebox(Model *model,UINT16 *base, int player_count);
+
+void render_splash_screen(UINT32 *base);
+
+void render_game_over_screen(UINT32 *base, int player);
+
+void render_win_screen(UINT32 *base, int player);
+
+
 #endif

@@ -1,18 +1,5 @@
-/*
-
-Purpose: Render the game to the screen. This is the main function that calls all the other render functions.
-Anything that needs to be rendered to the screen is implemented in this file
-
-*/
-
 #include "RENDERER.H"
 
-/*
-Inputs: Model *model, char *base, int player_count, int player
-Purpose: To render the everything that is needed in the game to the screen.
-This function calls all the other render functions.
-
-*/
 void render(Model *model, char *base, int player_count, int player)
 {
     /*clear_screen((char *)base);*/
@@ -27,18 +14,21 @@ void render(Model *model, char *base, int player_count, int player)
     render_pacman(model, (UINT16 *)base, player);
 
     /*
+    if (model->game_over) {
+        render_game_over_screen((UINT32 *)base, player);
+    }
+
+    if (model->pacman[player].snacks_eaten == 205) {
+        render_win_screen((UINT32 *)base, player);
+    }
+    */
+
+    /*
     render_cherries(model->cherries, (UINT16 *)base);
     render_glow_balls(model->glow_balls, (UINT16 *)base);
     */
 }
 
-/*
-
-Inputs: Model *model, UINT16 *base, int player_count
-Purpose: To render the pacman to the screen. Depending on the direction of the move it will face
-pacman to that direction.
-
-*/
 void render_pacman(Model *model, UINT16 *base, int player)
 {
     int i;
@@ -155,13 +145,6 @@ void render_pacman(Model *model, UINT16 *base, int player)
     }
 }
 
-
-/*
-
-Inputs: Model *model, UINT16 *base, int player
-Purpose: Renders the ghosts on the screen.
-
-*/
 void render_ghosts(Model *model, UINT16 *base, int player)
 {
     int i;
@@ -174,7 +157,7 @@ void render_ghosts(Model *model, UINT16 *base, int player)
         model->pacman[player].tick++;
     }
 
-    if (model->pacman[player].tick > 5)
+    if (model->pacman[player].tick > 60)
     {
         model->pacman[player].mode = NORMAL;
         model->pacman[player].tick = 0;
@@ -233,12 +216,6 @@ void render_ghosts(Model *model, UINT16 *base, int player)
     }
 }
 
-/*
-
-Inputs: Model *model, UINT16 *base, int player
-Purpose: Renders the snacks on the screen.
-
-*/
 void render_snacks(Model *model, UINT16 *base, int player)
 {
     int i;
@@ -265,12 +242,6 @@ void render_snacks(Model *model, UINT16 *base, int player)
     }
 }
 
-/*
-
-Inputs: Model *model, UINT16 *base, int player
-Purpose: Renders the cherries on the screen.
-
-*/
 void render_cherries(Model *model, UINT16 *base, int player)
 {
     int i;
@@ -288,13 +259,6 @@ void render_cherries(Model *model, UINT16 *base, int player)
     }
 }
 
-
-/*
-
-Inputs: Model *model, UINT16 *base, int player
-Purpose: Renders the glow balls on the screen.
-
-*/
 void render_glow_balls(Model *model, UINT16 *base, int player)
 {
     int i;
@@ -314,13 +278,6 @@ void render_glow_balls(Model *model, UINT16 *base, int player)
     }
 }
 
-
-/*
-
-Inputs: Model *model, UINT16 *base, int player
-Purpose: Renders the score box on the screen.
-
-*/
 void render_scorebox(Model *model, UINT8 *base, int player_count)
 {
     print_string_8(base, model->scorebox[0].x, model->scorebox[0].y, "P1 SCORE");
@@ -331,14 +288,6 @@ void render_scorebox(Model *model, UINT8 *base, int player_count)
         print_num(base, model->scorebox[1].x_score, model->scorebox[1].y_score, model->pacman[1].score);
     }
 }
-
-
-/*
-
-Inputs: UINT16 *base, int player_count
-Purpose: Clears the live box on the screen.
-
-*/
 
 void clear_livebox(UINT16 *base, int player_count)
 {
@@ -356,12 +305,6 @@ void clear_livebox(UINT16 *base, int player_count)
     }
 }
 
-/*
-
-Inputs: Model *model, UINT16 *base, int player_count
-Purpose: Renders the live box on the screen.
-
-*/
 void render_livebox(Model *model, UINT16 *base, int player_count)
 {
 
@@ -381,12 +324,7 @@ void render_livebox(Model *model, UINT16 *base, int player_count)
         }
     }
 }
-/*
 
-Inputs: UINT32 *base
-Purpose: Renders the splash screen on the screen. (Main Menu)
-
-*/
 void render_splash_screen(UINT32 *base)
 {
     clear_screen((char *)base);
@@ -399,66 +337,14 @@ void render_splash_screen(UINT32 *base)
 
 /* change map files to screen files. */
 
-/*
-void render_game_over_screen(UINT32 *base)
+void render_game_over_screen(UINT32 *base, int player)
 {
     clear_screen((char *)base);
     plot_screen((UINT32 *)base, (UINT32 *)game_over_screen);
 }
 
-void render_win_screen(UINT32 *base)
+void render_win_screen(UINT32 *base, int player)
 {
     clear_screen((char *)base);
     plot_screen((UINT32 *)base, (UINT32 *)win_screen);
-}
-*/
-
-/*
-void clear_snack(snack *snack, UINT16 *base)
-{
-    clear_region_16(base, snack->x + ALIGN_ITEM_X, snack->y + ALIGN_ITEM_Y);
-}
-*/
-
-/*
-
-Inputs: cherry *cherry, UINT16 *base
-Purpose: Clears the cherry on the screen.
-
-*/
-void clear_cherry(cherry *cherry, UINT16 *base)
-{
-    clear_region_16(base, cherry->x + ALIGN_ITEM_X, cherry->y + ALIGN_ITEM_Y);
-}
-
-/*
-
-INPUTS: glow_ball *glow_ball, UINT16 *base
-PURPOSE: Clears the glow ball on the screen.
-
-*/
-void clear_glow_ball(glow_ball *glow_ball, UINT16 *base)
-{
-    clear_region_16(base, glow_ball->x + ALIGN_ITEM_X, glow_ball->y + ALIGN_ITEM_X);
-}
-
-/*
-
-Inputs: ghost *ghost, UINT16 *base
-Purpose: Clears the ghost on the screen.
-
-*/
-void clear_ghost(ghost *ghost, UINT16 *base)
-{
-    clear_region_16(base, ghost->x + ALIGN_ITEM_X, ghost->y + ALIGN_ITEM_Y);
-}
-/*
-
-Inputs: pacman *pacman, UINT16 *base
-Purpose: Clears the pacman on the screen.
-
-*/
-void clear_pacman(pacman *pacman, UINT16 *base)
-{
-    clear_region_16(base, pacman->x + ALIGN_ITEM_X, pacman->y + ALIGN_ITEM_Y);
 }

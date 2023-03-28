@@ -1,10 +1,3 @@
-/*
-
-Purpose: To create a 2D array that represents the maze walls that are on the map,
-the snacks that are on the map, the cherries that are on the map and the glow balls.
-
-*/
-
 #include "MAZE_ARRAY.H"
 
 int cherry_array[17][30];
@@ -14,11 +7,6 @@ int glow_ball_array[17][30];
     0 = path
     1 = wall
     -1 = wall
-*/
-/*
-
-Purpose: To create a 2D array that repreesents the maze walls that are on the map.
-
 */
 int maze_array[17][30] = {
     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -44,11 +32,6 @@ int maze_array[17][30] = {
     0 = snack
     1 = no snack    
  */
-/*
-
-Purpose: To create a 2D array that represents the snack locations on the map.
-
-*/
 int snack_array[17][30] = {
     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},

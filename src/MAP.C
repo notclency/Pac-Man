@@ -1,9 +1,3 @@
-/*
-Purpose: This function purpose is to display the map, this sets the background of the map thats
-going to be played.
-
-*/
-
 #include "MAP.H"
 
 const UINT32 map_display [] = {

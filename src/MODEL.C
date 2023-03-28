@@ -1,84 +1,49 @@
-/*
-
-Purpose: This function is how the character move, and checks for all collisions of each character. 
-This function creates the models of pacman, ghost, snacks, cherries, and the maze and everything 
-else on the map. 
-
-*/
-
 #include "MODEL.H"
 #include "EVENTS.H"
 
-/*
-
-Input: Model *model, direction direction, int player
-Purpose: This function purpose is to move the pacman to the direction that the user inputs.
-It checks if the pacman is in bounds and checks if the pacman is not colliding with a wall.
-If the pacman is not colliding with a wall, it will move the pacman in the direction that 
-the user inputs. This function checks all collisions of pacman with walls and ghosts.
-
-*/
 void move_pacman(Model *model, direction direction, int player)
 {
 
     int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
 
-    /* check collisions here (ghost collisions) */
-    /* pass in model. Change parameters */
-
-    /* pass in x,y of pacman to check collisions with ghost */
-
     switch (direction)
     {
     case UP:
-        if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y - 1)) //checks pacman move is in bounds and not colliding with a wall.
-            model->pacman[player].direction = UP; //if pacman is not colliding with a wall, it will set pacmans direction.
+        if ((in_bounds(pacman_x, pacman_y - 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y - 1))
+            model->pacman[player].direction = UP;
         break;
-    case DOWN: 
-        if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y + 1)) //same as above
-            model->pacman[player].direction = DOWN; //same as above
+    case DOWN:
+        if ((in_bounds(pacman_x, pacman_y + 1) == TRUE) && !is_wall_pacman(pacman_x, pacman_y + 1))
+            model->pacman[player].direction = DOWN;
         break;
     case LEFT:
-        if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x - 1, pacman_y)) //same as above
-            model->pacman[player].direction = LEFT; //same as above
+        if ((in_bounds(pacman_x - 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x - 1, pacman_y))
+            model->pacman[player].direction = LEFT;
         break;
     case RIGHT:
-        if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x + 1, pacman_y)) //same as above
-            model->pacman[player].direction = RIGHT; // same as above
+        if ((in_bounds(pacman_x + 1, pacman_y) == TRUE) && !is_wall_pacman(pacman_x + 1, pacman_y))
+            model->pacman[player].direction = RIGHT;
         break;
     }
 }
-/*
 
-Inputs: ghost *ghost, pacman *pacman
-Purpose: This function purpose is to set the ghosts mode to roam, chase, or scatter.
-This function also calls ghost_roam, ghost_chase, and ghost_scatter functions to set 
-the ghost mode.
-
-*/
 void move_ghost(ghost *ghost, pacman *pacman)
 {
     switch (ghost->mode)
     {
     case ROAM:
-        ghost_roam(ghost); //calls ghost_roam function to set ghost mode to roam
+        ghost_roam(ghost);
         break;
     case CHASE:
-        ghost_chase(ghost, pacman); //calls ghost_chase function to set ghost mode to chase
+        ghost_chase(ghost, pacman);
         break;
     case SCATTER:
-        ghost_scatter(ghost, pacman); //calls ghost_scatter function to set ghost mode to scatter
+        ghost_scatter(ghost, pacman);
         break;
     }
 }
-/*
 
-Inputs: Model *model
-Purpose: This function purpose is to set the snacks position. it checks if the snacks 
-are eaten and if they are not eaten, it set the snack boolean to false.
-
-*/
 void ini_snacks(Model *model)
 {
     int i;
@@ -90,23 +55,18 @@ void ini_snacks(Model *model)
         {
             if (snack_array[i][j] == 0)
             {
-                model->snacks[MAZE_ARRAY_WIDTH * i + j].x = j; //sets the snack x position
-                model->snacks[MAZE_ARRAY_WIDTH * i + j].y = i; //sets the snack y position
-                model->snacks[MAZE_ARRAY_WIDTH * i + j].eaten = FALSE; //sets the snack boolean to false
+                model->snacks[MAZE_ARRAY_WIDTH * i + j].x = j;
+                model->snacks[MAZE_ARRAY_WIDTH * i + j].y = i;
+                model->snacks[MAZE_ARRAY_WIDTH * i + j].eaten = FALSE;
             }
         }
     }
 }
-/*
 
-Inputs: cherry cherry[]
-Purpose: This function purpose is to set the cherries position.
-
-*/
 void ini_cherries(cherry cherry[]) /* will define values as constants */
 {
     int i = 0;
-    cherry[i].x = 13; 
+    cherry[i].x = 13;
     cherry[i].y = 21;
     i++;
 
@@ -121,11 +81,7 @@ void ini_cherries(cherry cherry[]) /* will define values as constants */
     cherry[i].x = 26;
     cherry[i].y = 13;
 }
-/*
-Inputs: Model *model
-Purpose: This function purpose is to set the glowing balls position.
 
-*/
 void ini_glow_balls(Model *model) /* will define values as constants */
 {
     int i = 0;
@@ -150,12 +106,6 @@ void ini_glow_balls(Model *model) /* will define values as constants */
     model->glow_balls[i].eaten = FALSE;
 }
 
-/*
-
-Inputs: Model *model, int player_count
-Purpose: This function purpose is to set the scorebox position.
-
-*/
 void ini_scorebox(Model *model, int player_count)
 {
     scorebox *scorebox = model->scorebox;
@@ -176,13 +126,6 @@ void ini_scorebox(Model *model, int player_count)
     }
 }
 
-/*
-
-Inputs: Model *model, int player_count
-Purpose: This function purpose is to set the livebox position.
-
-*/
-
 void ini_livebox(Model *model, int player_count)
 {
     model->livebox[0].x = 6;
@@ -194,14 +137,7 @@ void ini_livebox(Model *model, int player_count)
         model->livebox[1].y = 53;
     }
 }
-/*
 
-Inputs: Model *model, int player_count, int player
-Purpose: This function purpose is to set the pacman position. If there are two players
-it also sets the second player position. This function also sets all of pacman starting 
-stats such as the tick, direction, is_dead, lives, score, and snacks_eaten.
-
-*/
 void ini_pacman(Model *model, int player_count, int player)
 {
     model->pacman[player].x = (15 + ALIGN_ITEM_X) * 16;
@@ -225,13 +161,6 @@ void ini_pacman(Model *model, int player_count, int player)
         model->pacman[player].snacks_eaten = 0;
     }
 }
-/*
-
-Inputs: Model *model, int player
-Purpose: This function purpose is to set the ghost position. It will set the pacman back to 
-it's starting position.
-
-*/
 
 void reset_pacman(Model *model, int player)
 {
@@ -240,13 +169,7 @@ void reset_pacman(Model *model, int player)
     model->pacman[player].direction = NONE;
     model->pacman[player].is_dead = FALSE;
 }
-/*
 
-Inputs: Model *model
-Purpose: This function purpose is to set the ghost position. It will set the ghost starting 
-position and set the ghost to be in the ghost house. 
-
-*/
 void ini_ghosts(Model *model)
 {
     ghost *ghost = model->ghosts;
@@ -263,48 +186,23 @@ void ini_ghosts(Model *model)
     }
 }
 
-/*
-
-Inputs: ghost *ghost
-Purpose: This function purpose is to set the ghost mode to roam. It will move the ghost around 
-the map and doesn't allow it to collide to any walls. 
-
-*/
 void ghost_roam(ghost *ghost)
 {
     ghost->direction = (direction)(rand() % 4);
 
     while (1)
     {
-        if (ghost->direction == UP && !is_wall(get_ghost_x(ghost), get_ghost_y(ghost) - 1)) // if the ghost is moving up and there is no wall
+        if (ghost->direction == UP && !is_wall(get_ghost_x(ghost), get_ghost_y(ghost) - 1))
         {
-            ghost->direction = UP; // move up
+            ghost->direction = UP;
             return;
         }
-        else if (ghost->direction == DOWN && !is_wall(get_ghost_x(ghost), get_ghost_y(ghost) + 1)) // if the ghost is moving down and there is no wall
+        else if (ghost->direction == DOWN && !is_wall(get_ghost_x(ghost), get_ghost_y(ghost) + 1))
         {
-            ghost->direction = DOWN; // move down
+            ghost->direction = DOWN;
             return;
         }
-        else if (ghost->direction == LEFT && !is_wall(get_ghost_x(ghost) - 1, get_ghost_y(ghost))) // if the ghost is moving left and there is no wall
-        {
-            ghost->direction = LEFT; // move left
-            return;
-        }
-        else if (ghost->direction == RIGHT && !is_wall(get_ghost_x(ghost) + 1, get_ghost_y(ghost))) // if the ghost is moving right and there is no wall
-        {
-            ghost->direction = RIGHT; // move right
-            return;
-        }
-        else
-        {
-            ghost->direction = (direction)(rand() % 4); 
-        }
-        {
-            ghost->direction = DOWN; 
-            return;
-        }
-        else if (ghost->direction == LEFT && !is_wall(get_ghost_x(ghost) - 1, get_ghost_y(ghost))) 
+        else if (ghost->direction == LEFT && !is_wall(get_ghost_x(ghost) - 1, get_ghost_y(ghost)))
         {
             ghost->direction = LEFT;
             return;
@@ -320,15 +218,10 @@ void ghost_roam(ghost *ghost)
         }
     }
 }
-/*
 
-Inputs: ghost *ghost, pacman *pacman
-Purpose: This function purpose is to set the ghost mode to chase. It will move the ghost to chase pacman.
-
-*/
 void ghost_chase(ghost *ghost, pacman *pacman)
 {
-    if (pacman->x < ghost->x) 
+    if (pacman->x < ghost->x)
     {
         while (1)
         {
@@ -422,14 +315,6 @@ void ghost_chase(ghost *ghost, pacman *pacman)
     }
 }
 
-
-/*
-
-Inputs: ghost *ghost, pacman *pacman
-Purpose: This function purpose is to set the ghost mode to scatter. It will move the ghost 
-to scatter around the map as a way to prevent pacman from eating it.
-
-*/
 void ghost_scatter(ghost *ghost, pacman *pacman)
 {
     if (pacman->x < ghost->x)
@@ -526,61 +411,40 @@ void ghost_scatter(ghost *ghost, pacman *pacman)
     }
 }
 
-/*
-
-Inputs: model *model, int player
-Purpose: This function purpose check if pacman has collided with a snack pallet and if it has, 
-it will increment the snacks eaten for pacman.
-
-*/
 void pacman_collides_with_snack(Model *model, int player)
 {
-    int pacman_x = get_pacman_x(&model->pacman[player]); //get pacman x and y
-    int pacman_y = get_pacman_y(&model->pacman[player]); //get pacman x and y
+    int pacman_x = get_pacman_x(&model->pacman[player]);
+    int pacman_y = get_pacman_y(&model->pacman[player]);
 
-    int snack_x = model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].x;  //get snack x and y
+    int snack_x = model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].x;
     int snack_y = model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].y;
 
     if ((pacman_x == snack_x) && (pacman_y == snack_y) && (model->snacks[MAZE_ARRAY_WIDTH * pacman_y + pacman_x].eaten == FALSE))
     {
-        model->pacman[player].snacks_eaten++; //increment snacks eaten
-        on_snack_eat(model, player); //call on snack eat function
+        model->pacman[player].snacks_eaten++;
+        on_snack_eat(model, player);
     }
 }
-/*
 
-Input:  Model *model, int player
-Purpose: This function purpose is to check if pacman has collided with a cherry and if it has we have to
-set the cherry to eaten and call the on cherry eat function.
-
-*/
 void pacman_collides_with_cherry(Model *model, int player)
 {
     int i;
-    int pacman_x = (model->pacman[player].x / 16) - ALIGN_ITEM_X; //get pacman x and y
-    int pacman_y = (model->pacman[player].y / 16) - ALIGN_ITEM_Y; //get pacman x and y
+    int pacman_x = (model->pacman[player].x / 16) - ALIGN_ITEM_X;
+    int pacman_y = (model->pacman[player].y / 16) - ALIGN_ITEM_Y;
 
     for (i = 0; i < 4; i++)
     {
         if ((pacman_x == model->cherries[i].x) && (pacman_y == model->cherries[i].y) && (model->cherries[i].eaten == FALSE))
         {
-            model->cherries[i].eaten = TRUE; //set cherry to eaten
-            on_cherry_eat(model, player);   //call on cherry eat function
+            model->cherries[i].eaten = TRUE;
+            on_cherry_eat(model, player);
         }
     }
 }
 
-/*
-
-Inputs: Model *model, int player
-Purpose: This function purpose is to check if pacman has collided with a glow ball and if it has we have to set the 
-glowing ball to eten and call the on glow ball eat function.
-
-
-*/
 void pacman_collides_with_glow_ball(Model *model, int player)
 {
-    int pacman_x = get_pacman_x(&model->pacman[player]); //get pacman x and y
+    int pacman_x = get_pacman_x(&model->pacman[player]);
     int pacman_y = get_pacman_y(&model->pacman[player]);
     int i;
 
@@ -588,38 +452,33 @@ void pacman_collides_with_glow_ball(Model *model, int player)
     {
         if ((pacman_x == model->glow_balls[i].x) && (pacman_y == model->glow_balls[i].y) && (model->glow_balls[i].eaten == FALSE))
         {
-            model->glow_balls[i].eaten = TRUE;  //set glow ball to eaten
-            on_glow_ball_eat(model, player);    //call on glow ball eat function
+            model->glow_balls[i].eaten = TRUE;
+            on_glow_ball_eat(model, player);
         }
     }
 }
-/*
 
-Inputs: Model *model, int player
-Purpose: This function purpose is to check if pacman has collided with a ghost.
-
-*/
 void pacman_collides_with_ghost(Model *model, int player)
 {
     int i;
-    int pacman_x = get_pacman_x(&model->pacman[player]); //get pacman x and y
-    int pacman_y = get_pacman_y(&model->pacman[player]); 
+    int pacman_x = get_pacman_x(&model->pacman[player]);
+    int pacman_y = get_pacman_y(&model->pacman[player]);
 
     int ghost_x;
     int ghost_y;
 
     for (i = 0; i < 3; i++)
     {
-        ghost_x = get_ghost_x(&model->ghosts[i]);  //get ghost x and y
+        ghost_x = get_ghost_x(&model->ghosts[i]);
         ghost_y = get_ghost_y(&model->ghosts[i]);
 
-        if ((pacman_x == ghost_x) && (pacman_y == ghost_y)) //if the ghost x and y are the same as the pacman x and y
+        if ((pacman_x == ghost_x) && (pacman_y == ghost_y))
         {
-            on_ghost_eat(model, i, player); //call on ghost eat function
+            on_ghost_eat(model, i, player);
         }
         else
         {
-            switch (model->pacman[player].direction) 
+            switch (model->pacman[player].direction)
             {
             case UP:
                 if ((pacman_x == ghost_x) && (pacman_y - 1 == ghost_y) && (model->ghosts[i].direction == DOWN))
@@ -650,12 +509,6 @@ void pacman_collides_with_ghost(Model *model, int player)
     }
 }
 
-/*
-
-Inputs: ghost *ghost
-Purpose: This function purpose is resets the ghost to the their starting positions.
-
-*/
 void reset_ghost(ghost *ghost)
 {
     ghost->x = (19 + ALIGN_ITEM_X) * 16;
@@ -665,12 +518,7 @@ void reset_ghost(ghost *ghost)
     ghost->is_dead = FALSE;
     ghost->in_ghost_house = TRUE;
 }
-/*
 
-Inputs: Model *model
-Purpose: This function purpose is reset the ghost mode to Roam for all ghosts.
-
-*/
 void reset_ghost_mode(Model *model)
 {
     int i = 0;
@@ -680,12 +528,6 @@ void reset_ghost_mode(Model *model)
     }
 }
 
-/*
-
-Inputs: Model *model, int player_count, int player
-Purpose: This function purpose is to set up the game session for the game.
-
-*/
 void ini_game_session(Model *model, int player_count, int player)
 {
     model->game_over = FALSE;
@@ -699,12 +541,6 @@ void ini_game_session(Model *model, int player_count, int player)
     ini_livebox(model, player_count);
 }
 
-/*
-
-Inputs: Model *model, int player
-Purpose: This function purpose is to reset the game session for the game.
-
-*/
 void reset_game_session(Model *model, int player)
 {
     ini_glow_balls(model);
@@ -713,13 +549,6 @@ void reset_game_session(Model *model, int player)
     reset_pacman(model, player);
 }
 
-/*
-
-Inputs: Model *model, int player
-Purpose: This function purpose is see if pacman is out of lives and if he is we close the game session 
-but if he isnt out of lives we just reset the session.
-
-*/
 void is_dead(Model *model, int player)
 {
     if (model->pacman[player].lives > 0)
@@ -732,99 +561,46 @@ void is_dead(Model *model, int player)
     }
 }
 
-/*
-
-Inputs: Model *model, int player
-Purpose: This function purpose is to reset the pacman state.
-
-*/
 void reset_pacman_state(Model *model, int player)
 {
     model->pacman[player].mode = NORMAL;
 }
 
-/*
-
-Inputs: Model *model
-Purpose: This function purpose is to close the game session.
-
-*/
 void close_game_session(Model *model)
 {
     model->game_over = TRUE;
 }
 
-/*
-
-Inputs: Model *model
-Purpose: This function purpose is to set the model to game won.
-
-*/
 void won_game_session(Model *model)
 {
     model->game_won = TRUE;
 }
 
-/*
-
-Inputs: pacman *pacman
-Purpose: This function purpose is to get pacman x.
-
-*/
 int get_pacman_x(pacman *pacman)
 {
     return (pacman->x / 16) - ALIGN_ITEM_X;
 }
 
-/*
-
-Inputs: pacman *pacman
-Purpose: This function purpose is to get pacman y.
-
-*/
 int get_pacman_y(pacman *pacman)
 {
     return (pacman->y / 16) - ALIGN_ITEM_Y;
 }
 
-/*
-
-Inputs: ghost *ghost
-Purpose: This function purpose is to get ghost x.
-
-*/
 int get_ghost_x(ghost *ghost)
 {
     return (ghost->x / 16) - ALIGN_ITEM_X;
 }
 
-/*
-
-Inputs: ghost *ghost
-Purpose: This function purpose is to get ghost y.
-
-*/
 int get_ghost_y(ghost *ghost)
 {
     return (ghost->y / 16) - ALIGN_ITEM_Y;
 }
 
-/*
-
-Inputs: int x, int y
-Purpose: This function purpose is to know/get the walls of the map 
-
-*/
 int is_wall(int x, int y)
 {
     return (maze_array[y][x] == 1);
 }
 
-/*
-
-Inputs: Model *model, int player
-
-*/
 int is_wall_pacman(int x, int y)
 {
     return (maze_array[y][x] == 1 || maze_array[y][x] == -1);

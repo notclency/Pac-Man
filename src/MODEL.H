@@ -20,7 +20,8 @@
 */
 typedef struct
 {
-    int x, y;
+    float x, y;
+    float prev_x, prev_y;
     direction direction;
     int lives;
     int score;
