@@ -1,32 +1,27 @@
 /*
-	File Name: RASTER.C
 
-	Purpose: The purpose of this file is a library design of a
-	pac-man game which develops low-level routines and other
-	designs or drawings. We have created many plot functions
-	that can plot bitmaps,pixel,shapes,clear/black screen.
-
-	Authors: Glenn and Clency
+---------------------------------------------------------------------------------------------------
+File Name: RASTER.C
+---------------------------------------------------------------------------------------------------
+Purpose: The purpose of this file is a library design of a
+pac-man game which develops low-level routines and other
+designs or drawings. We have created many plot functions
+that can plot bitmaps,pixel,shapes,clear/black screen.
+---------------------------------------------------------------------------------------------------
+Functions: in_bounds, plot_pixel, plot_vertical_line, plot_horizontal_line, plot_bitmap, 
+plot_rectangle, plot_square, clear_pixel, clear_screen, print_char, print_string, plot_bitmap_16,
+set_video_base, get_video_base, clear_region_16_2, print_num, plot_screen, plot_map, plot_bitmap_32,
+plot_bitmap_8
+---------------------------------------------------------------------------------------------------
+Issues/Problems:  None
+---------------------------------------------------------------------------------------------------
+Authors: - CLENCY TABE AND GLENN YEAP
+---------------------------------------------------------------------------------------------------
 
 */
-#include "RASTER.H"
-#include "font.h"
 
-/*
-	index:
-
-	plot pixel
-	plot vertical line
-	plot horizontal line
-	plot bitmap
-	plot rectangle
-	plot square
-	clear pixel
-	clear screen
-	print char
-	print string
-	plot screen
-*/
+#include "include\RASTER.H"
+#include "include\FONT.h"
 
 /*
 	parameters:
@@ -388,16 +383,33 @@ void plot_screen(UINT32 *base, UINT32 *bitmap)
 		*(base + i) = bitmap[i];
 }
 
-void clear_region_16(UINT16 *base, int x, int y)
+void clear_region_16(UINT16 *base, int x, int y, int height)
 {
 	int i;
 
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
 	{
-		for (i = 0; i < 16; i++)
+		for (i = 0; i < height; i++)
 		{
 			*(base + y * 40 + x) = 0xFFFF;
 			y++;
 		}
+	}
+}
+
+void clear_region_16_2(UINT16 *base, int x, int y, int height)
+{
+	int i;
+
+	for (i = 0; i < height; i++)
+	{
+		*(base + y * 40 + (x / 16)) = 0xFFFF;
+
+		if (x % 16 != 0)
+		{
+			*(base + y * 40 + (x / 16) + 1) = 0xFFFF;
+		}
+
+		y++;
 	}
 }

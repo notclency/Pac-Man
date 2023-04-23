@@ -1,3 +1,22 @@
+/*
+
+---------------------------------------------------------------------------------------------------
+File Name: INPUT.C 
+---------------------------------------------------------------------------------------------------
+Purpose: This file contains anything that deals with input from the user. This includes the keyboard
+and mouse. The purpose of the file is to handle any input from the user and allow us to use it in the
+game.
+---------------------------------------------------------------------------------------------------
+Functions: is_key_pressed, read_from_ikbd_buffer, clear_ikbd_buffer, get_user_input.
+---------------------------------------------------------------------------------------------------
+Issues/Problems:  None
+---------------------------------------------------------------------------------------------------
+Authors: - CLENCY TABE AND GLENN YEAP
+---------------------------------------------------------------------------------------------------
+
+*/
+
+
 #include "INPUT.H"
 #include <osbind.h>
 

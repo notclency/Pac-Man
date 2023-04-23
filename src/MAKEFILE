@@ -1,42 +1,71 @@
-pacman: font.o pacman.o raster.o rast_asm.o splash.o map.o sprites.o events.o model.o renderer.o input.o
-	cc68x -g pacman.o raster.o rast_asm.o font.o splash.o map.o sprites.o events.o model.o renderer.o input.o -o pacman
+pacman: font.o raster.o rast_asm.o ikbd.o vbl.o isr.o video.o super.o splash.o maps.o gameover.o gamewon.o psg.o music.o maze.o sprites.o events.o model.o renderer.o pacman.o menu.o game.o
+	cc68x -g pacman.o raster.o asm\rast_asm.o asm\ikbd.o asm\vbl.o isr.o asm\video.o asm\super.o font.o psg.o music.o splash.o maps.o maze.o gameover.o gamewon.o sprites.o events.o model.o renderer.o menu.o game.o -o pacman
 
-events.o: events.c raster.h
+events.o: events.c
 	cc68x -g -c events.c
 
-pacman.o: pacman.c raster.h 
+pacman.o: pacman.c
 	cc68x -g -c pacman.c
 
-raster.o: raster.c raster.h
+raster.o: raster.c
 	cc68x -g -c raster.c
 
-font.o: font.c raster.h
+font.o: font.c
 	cc68x -g -c font.c
 
-splash.o: splash.c raster.h
+splash.o: splash.c
 	cc68x -g -c splash.c
 
-model.o: model.c raster.h
+end.o: end.c
+	cc68x -g -c end.c
+
+model.o: model.c
 	cc68x -g -c model.c
 
-map.o: map.c raster.h
-	cc68x -g -c map.c
+maps.o: maps.c
+	cc68x -g -c maps.c
 
-input.o: input.c raster.h
-	cc68x -g -c input.c
+maze.o: maze.c
+	cc68x -g -c maze.c
 
-renderer.o: renderer.c raster.h
+renderer.o: renderer.c
 	cc68x -g -c renderer.c
 
-maze_array.o: maze_array.c raster.h
-	cc68x -g -c maze_array.c
-
-sprites.o: sprites.c raster.h
+sprites.o: sprites.c
 	cc68x -g -c sprites.c
 
-rast_asm.o: rast_asm.s
-	gen -D -L2 rast_asm.s
+rast_asm.o: asm\rast_asm.s
+	gen -D -L2 asm\rast_asm.s
 
+ikbd.o: asm\ikbd.s
+	gen -D -L2 asm\ikbd.s
 
+gameover.o: gameover.c
+	cc68x -g -c gameover.c
 
+gamewon.o: gamewon.c
+	cc68x -g -c gamewon.c
 
+vbl.o: asm\vbl.s
+	gen -D -L2 asm\vbl.s
+
+isr.o: isr.c
+	cc68x -g -c isr.c
+
+video.o: asm\video.s
+	gen -D -L2 asm\video.s
+
+super.o: asm\super.s
+	gen -D -L2 asm\super.s
+
+menu.o: menu.c
+	cc68x -g -c menu.c
+
+game.o: game.c
+	cc68x -g -c game.c
+
+psg.o: psg.c
+	cc68x -g -c psg.c
+
+music.o: music.c
+	cc68x -g -c music.c
